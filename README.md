@@ -48,7 +48,7 @@ We take your privacy seriously. JisokuDict does not collect personal data. For m
 
 ## Links
 
-- [Download on the App Store](#) *(coming soon)*
+- [Download on the App Store](https://apps.apple.com/app/jisokudict/id6757970596)
 
 ---
 
