@@ -17,7 +17,7 @@ JisokuDict is a fast, offline Japanese dictionary with over 200,000 entries. Fea
 
 ### Report a Bug or Request a Feature
 
-If you encounter any issues or have suggestions for improvements, please [open an issue](../../issues) on this repository.
+If you encounter any issues or have suggestions for improvements, please [open an issue](https://github.com/dnlosx/JisokuDict-Support/issues) on this repository.
 
 When reporting a bug, please include:
 - Device model (e.g., iPhone 15, iPad Pro)
