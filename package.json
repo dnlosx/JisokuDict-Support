@@ -1,0 +1,27 @@
+{
+  "name": "jisokudict-support",
+  "version": "1.0.0",
+  "description": "JisokuDict - Japanese-English dictionary app for iOS and macOS",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dnlosx/JisokuDict-Support.git"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.2.11",
+    "autoprefixer": "^10.4.24",
+    "next": "^15.0.0",
+    "postcss": "^8.5.6",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.9.3"
+  }
+}
