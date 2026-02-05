@@ -1,54 +1,40 @@
-# JisokuDict Support
+# JisokuDict
 
-Welcome to the support page for **JisokuDict** - a Japanese-English dictionary app for iOS and macOS.
+Landing page and support site for **JisokuDict** - a Japanese-English dictionary app for iOS and macOS.
+
+## Links
+
+- **Website:** [jisoku.sukoshi.net](https://jisoku.sukoshi.net)
+- **App Store:** [Download on the App Store](https://apps.apple.com/us/app/jisokudict/id6757970596)
+- **Issues:** [Report a bug or request a feature](https://github.com/dnlosx/JisokuDict-Support/issues)
 
 ## About JisokuDict
 
 JisokuDict is a fast, offline Japanese dictionary with over 200,000 entries. Features include:
 
-- **Smart Search**: Auto-detects Japanese, English, or Romaji input
-- **Romaji Support**: Type "konnichiwa" to find こんにちは
-- **Kanji Lookup**: Search by reading, meaning, stroke count, or JLPT level
-- **Favorites**: Save words and kanji for quick access
-- **iCloud Sync**: Your favorites sync across all your devices
-- **No Internet Required**: Full dictionary available offline
+- **Smart Search** - Auto-detects Japanese, English, or Romaji input
+- **Romaji Support** - Type "konnichiwa" to find こんにちは
+- **Kanji Lookup** - Search by reading, meaning, stroke count, or JLPT level
+- **Favorites** - Save words and kanji for quick access
+- **iCloud Sync** - Your favorites sync across all your devices
+- **Works Offline** - Full dictionary available without internet
 
-## Getting Help
+## Development
 
-### Report a Bug or Request a Feature
+This is a Next.js site deployed on Railway.
 
-If you encounter any issues or have suggestions for improvements, please [open an issue](https://github.com/dnlosx/JisokuDict-Support/issues) on this repository.
+```bash
+npm install       # Install dependencies
+npm run dev       # Start dev server (http://localhost:3000)
+npm run build     # Build for production
+```
 
-When reporting a bug, please include:
-- Device model (e.g., iPhone 15, iPad Pro)
-- iOS/macOS version
-- Steps to reproduce the issue
-- Screenshots if applicable
+## Pages
 
-### Frequently Asked Questions
-
-**Q: Why does the app take time to load on first launch?**
-A: JisokuDict includes a comprehensive offline dictionary. On first launch, it needs to prepare the database, which may take a few seconds.
-
-**Q: How do I remove ads?**
-A: You can purchase "Remove Ads" from the Settings screen to permanently remove all banner ads.
-
-**Q: How do I restore my purchase on a new device?**
-A: Go to Settings and tap "Restore Purchases" to restore your previous purchases.
-
-**Q: Are my favorites backed up?**
-A: Yes, if you're signed into iCloud, your favorites automatically sync across all your devices.
-
-**Q: Does the app work offline?**
-A: Yes! The entire dictionary is stored on your device. No internet connection is required to search.
-
-## Privacy
-
-We take your privacy seriously. JisokuDict does not collect personal data. For more information, see our [Privacy Policy](PRIVACY.md).
-
-## Links
-
-- [Download on the App Store](https://apps.apple.com/app/jisokudict/id6757970596)
+- `/` - Landing page
+- `/support` - Support & FAQ
+- `/privacy` - Privacy policy
+- `/app-ads.txt` - AdMob verification
 
 ---
 
