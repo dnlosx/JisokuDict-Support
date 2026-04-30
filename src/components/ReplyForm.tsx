@@ -5,9 +5,12 @@ import { useState } from 'react'
 
 type Props = {
   endpoint: string
+  /** Send `asAdmin: true` so the API stamps the reply as Staff. Only used
+   *  on the admin ticket page. */
+  asAdmin?: boolean
 }
 
-export function ReplyForm({ endpoint }: Props) {
+export function ReplyForm({ endpoint, asAdmin }: Props) {
   const router = useRouter()
   const [body, setBody] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -23,7 +26,7 @@ export function ReplyForm({ endpoint }: Props) {
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ body }),
+        body: JSON.stringify(asAdmin ? { body, asAdmin: true } : { body }),
       })
       if (!res.ok) {
         if (res.status === 401) {

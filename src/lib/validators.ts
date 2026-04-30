@@ -47,6 +47,9 @@ export const replyMessageSchema = z.object({
   body: messageBodySchema,
   username: usernameSchema.optional(),
   turnstileToken: turnstileTokenSchema.optional(),
+  /** Admin opt-in: posting as Staff requires this flag, so an admin who's
+   *  also a ticket owner can still reply as themselves from the owner form. */
+  asAdmin: z.boolean().optional(),
 })
 
 export const adminAuthSchema = z.object({

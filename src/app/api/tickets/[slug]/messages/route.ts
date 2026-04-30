@@ -1,4 +1,4 @@
-import { desc, eq } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 
 import { db } from '@/db'
@@ -61,26 +61,35 @@ export async function POST(req: NextRequest, ctx: Params) {
     )
   }
 
-  // Branch by replier kind. We use this to decide username, rate-limit key,
-  // and whether to auto-issue a cookie + recovery URL.
-  type ReplierKind = 'admin' | 'owner' | 'community'
-  const kind: ReplierKind = admin ? 'admin' : isOwner ? 'owner' : 'community'
+  // Staff-stamping requires BOTH a valid signed admin cookie (`admin`, from
+  // `isAdmin()` → HMAC verify against AUTH_SECRET) AND an explicit opt-in
+  // from the form (`asAdmin: true`). The flag alone is not a credential —
+  // without the cookie it's ignored. The opt-in lets an admin who also owns
+  // a ticket reply as themselves from the owner form.
+  const role: 'user' | 'admin' = parsed.data.asAdmin && admin ? 'admin' : 'user'
 
   let userTokenId: string | null = owner?.id ?? null
   let issuedRawToken: string | null = null
   let username = ''
 
-  if (kind === 'community') {
-    // Community replies on public tickets must include a username.
-    if (!parsed.data.username) {
+  if (role === 'user') {
+    if (typeof parsed.data.username === 'string') {
+      username = parsed.data.username
+    } else if (isOwner) {
+      // Owner clicked the simple reply form (no username field). Reuse the
+      // username they registered the ticket with.
+      username = ticket.authorUsername
+    } else {
+      // Non-admin, non-owner with no username supplied: the form is
+      // misconfigured. Surface as invalid input rather than silently dropping.
       return NextResponse.json(
         { error: 'invalid_input', details: { fieldErrors: { username: ['Required'] } } },
         { status: 400 }
       )
     }
-    username = parsed.data.username
 
-    // First-time poster (no cookie) must pass Turnstile; subsequent posts skip it.
+    // Anyone replying without a `jsk_user` cookie has to pass Turnstile, after
+    // which we issue them one. Subsequent posts from the same browser skip it.
     if (!existingRawToken || !owner) {
       if (!parsed.data.turnstileToken) {
         return NextResponse.json({ error: 'captcha_required' }, { status: 400 })
@@ -98,14 +107,10 @@ export async function POST(req: NextRequest, ctx: Params) {
       userTokenId = created.id
       issuedRawToken = raw
     }
-  } else if (kind === 'owner') {
-    // Owner replies reuse the ticket's username for consistency, ignoring any
-    // username they pass in the body.
-    username = ticket.authorUsername
   }
 
   const rateKey =
-    kind === 'admin'
+    role === 'admin'
       ? `admin:message_create`
       : `user:${userTokenId ?? 'unknown'}:message_create`
   const bucket = await checkAndIncrement(rateKey, 20, 3600)
@@ -113,25 +118,12 @@ export async function POST(req: NextRequest, ctx: Params) {
     return NextResponse.json({ error: 'rate_limited' }, { status: 429 })
   }
 
-  // After auto-issuing for a community reply, prefill the username from the most
-  // recent thing this cookie has authored — but only if they didn't pass one in.
-  // (We always require username for community, so this is only for symmetry.)
-  if (kind === 'community' && !username && userTokenId) {
-    const recent = await db
-      .select({ authorUsername: tickets.authorUsername })
-      .from(tickets)
-      .where(eq(tickets.userTokenId, userTokenId))
-      .orderBy(desc(tickets.createdAt))
-      .limit(1)
-    username = recent[0]?.authorUsername ?? ''
-  }
-
   db.transaction((tx) => {
     tx.insert(ticketMessages)
       .values({
         ticketId: ticket.id,
-        authorRole: kind === 'admin' ? 'admin' : 'user',
-        authorUsername: kind === 'admin' ? '' : username,
+        authorRole: role,
+        authorUsername: role === 'admin' ? '' : username,
         body: parsed.data.body,
       })
       .run()

@@ -85,7 +85,7 @@ export default async function AdminTicketPage({ params }: Params) {
           <TicketThread messages={threadMessages} />
 
           <div className="mt-8 border-t border-ink-100 pt-6">
-            <ReplyForm endpoint={`/api/tickets/${ticket.publicId}/messages`} />
+            <ReplyForm endpoint={`/api/tickets/${ticket.publicId}/messages`} asAdmin />
           </div>
         </div>
       </main>
