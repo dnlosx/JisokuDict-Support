@@ -30,8 +30,17 @@ export function TicketThread({ messages }: Props) {
           }`}
         >
           <header className="flex items-baseline justify-between gap-3 mb-3">
-            <span className="text-sm font-medium text-ink-900">{m.authorDisplayName}</span>
-            <time className="text-xs text-ink-500" dateTime={new Date(m.createdAt).toISOString()}>
+            <span className="flex items-baseline gap-2 min-w-0">
+              <span className="text-sm font-medium text-ink-900 truncate">
+                {m.authorDisplayName}
+              </span>
+              {m.authorRole === 'admin' ? (
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide bg-sakura-600 text-white shrink-0">
+                  Staff
+                </span>
+              ) : null}
+            </span>
+            <time className="text-xs text-ink-500 shrink-0" dateTime={new Date(m.createdAt).toISOString()}>
               {FMT.format(new Date(m.createdAt))}
             </time>
           </header>

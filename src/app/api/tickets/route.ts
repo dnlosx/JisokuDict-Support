@@ -122,6 +122,7 @@ export async function POST(req: NextRequest) {
       .values({
         ticketId: t.id,
         authorRole: 'user',
+        authorUsername: finalUsername,
         body: messageBody,
       })
       .run()

@@ -40,7 +40,10 @@ export default async function AuthorTicketPage({ params }: Params) {
   const threadMessages = messages.map((m) => ({
     id: m.id,
     authorRole: m.authorRole,
-    authorDisplayName: m.authorRole === 'admin' ? 'JisokuDict Support' : ticket.authorUsername,
+    authorDisplayName:
+      m.authorRole === 'admin'
+        ? 'JisokuDict Support'
+        : m.authorUsername || ticket.authorUsername,
     body: m.body,
     createdAt: m.createdAt,
   }))

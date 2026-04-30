@@ -1,11 +1,28 @@
 import { z } from 'zod'
 
+const RESERVED_USERNAMES = [
+  'jisokudict support',
+  'jisokudict',
+  'jisoku support',
+  'jisoku',
+  'support',
+  'admin',
+  'staff',
+  'official',
+  'moderator',
+  'mod',
+]
+
 export const usernameSchema = z
   .string()
   .trim()
   .min(2, 'Username must be at least 2 characters')
   .max(60, 'Username must be at most 60 characters')
   .regex(/^[\p{L}\p{N} _.\-]+$/u, 'Username may contain letters, numbers, spaces, underscores, dots, and dashes only')
+  .refine(
+    (v) => !RESERVED_USERNAMES.includes(v.toLowerCase()),
+    'That username is reserved — please pick another.'
+  )
 
 export const ticketCategorySchema = z.enum(['bug', 'feature', 'account', 'other'])
 
@@ -28,6 +45,8 @@ export const createTicketSchema = z.object({
 
 export const replyMessageSchema = z.object({
   body: messageBodySchema,
+  username: usernameSchema.optional(),
+  turnstileToken: turnstileTokenSchema.optional(),
 })
 
 export const adminAuthSchema = z.object({

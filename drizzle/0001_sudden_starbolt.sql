@@ -1,0 +1,1 @@
+ALTER TABLE `ticket_messages` ADD `author_username` text DEFAULT '' NOT NULL;

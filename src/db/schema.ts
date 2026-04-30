@@ -67,6 +67,7 @@ export const ticketMessages = sqliteTable(
       .notNull()
       .references(() => tickets.id, { onDelete: 'cascade' }),
     authorRole: text('author_role', { enum: MESSAGE_ROLES }).notNull(),
+    authorUsername: text('author_username').notNull().default(''),
     body: text('body').notNull(),
     createdAt: integer('created_at', { mode: 'timestamp_ms' })
       .$defaultFn(() => new Date())

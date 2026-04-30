@@ -1,14 +1,16 @@
-import { and, asc, eq } from 'drizzle-orm'
+import { and, asc, desc, eq } from 'drizzle-orm'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
+import { PublicReplyForm } from '@/components/PublicReplyForm'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
 import { TicketCategoryBadge } from '@/components/TicketBadges'
 import { TicketThread } from '@/components/TicketThread'
 import { db } from '@/db'
 import { ticketMessages, tickets } from '@/db/schema'
+import { getUserTokenRecord } from '@/lib/auth/cookie'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -50,10 +52,27 @@ export default async function PublicTicketPage({ params }: Params) {
   const threadMessages = messages.map((m) => ({
     id: m.id,
     authorRole: m.authorRole,
-    authorDisplayName: m.authorRole === 'admin' ? 'JisokuDict Support' : ticket.authorUsername,
+    authorDisplayName:
+      m.authorRole === 'admin'
+        ? 'JisokuDict Support'
+        : m.authorUsername || ticket.authorUsername,
     body: m.body,
     createdAt: m.createdAt,
   }))
+
+  const owner = await getUserTokenRecord()
+  const hasCookie = !!owner
+  // Pre-fill the username with the most recent name they've used on this browser.
+  let defaultUsername: string | undefined
+  if (owner) {
+    const recent = await db
+      .select({ authorUsername: tickets.authorUsername })
+      .from(tickets)
+      .where(eq(tickets.userTokenId, owner.id))
+      .orderBy(desc(tickets.createdAt))
+      .limit(1)
+    defaultUsername = recent[0]?.authorUsername
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -80,9 +99,25 @@ export default async function PublicTicketPage({ params }: Params) {
 
           <TicketThread messages={threadMessages} />
 
+          <section className="mt-8 border-t border-ink-100 pt-6">
+            <h2 className="text-lg font-semibold text-ink-900 mb-3">Add a reply</h2>
+            <p className="text-sm text-ink-500 mb-4">
+              Anyone can reply on the public knowledge base. Replies from JisokuDict show a{' '}
+              <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide bg-sakura-600 text-white align-middle">
+                Staff
+              </span>{' '}
+              badge.
+            </p>
+            <PublicReplyForm
+              endpoint={`/api/tickets/${ticket.publicId}/messages`}
+              hasCookie={hasCookie}
+              defaultUsername={defaultUsername}
+            />
+          </section>
+
           <div className="mt-8 border-t border-ink-100 pt-6">
             <p className="text-sm text-ink-500">
-              Have a similar question?{' '}
+              Have a different question?{' '}
               <Link href="/support/tickets/new" className="text-sakura-600 hover:text-sakura-700 underline">
                 Submit a new ticket
               </Link>
