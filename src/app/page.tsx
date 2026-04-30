@@ -134,14 +134,6 @@ export default function HomePage() {
             <Link href="/privacy" className="text-ink-500 hover:text-ink-900 transition">
               Privacy Policy
             </Link>
-            <a
-              href="https://github.com/dnlosx/JisokuDict-Support/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-ink-500 hover:text-ink-900 transition"
-            >
-              Report an Issue
-            </a>
           </div>
         </div>
       </footer>

@@ -1,51 +1,28 @@
-import Link from 'next/link'
 import type { Metadata } from 'next'
+import Link from 'next/link'
+
+import { SiteFooter } from '@/components/SiteFooter'
+import { SiteHeader } from '@/components/SiteHeader'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy - JisokuDict',
-  description: 'Privacy policy for JisokuDict Japanese dictionary app.',
+  description: 'Privacy policy for JisokuDict Japanese dictionary app and the JisokuDict Support service.',
 }
-
-const APP_STORE_URL = 'https://apps.apple.com/us/app/jisokudict/id6757970596'
 
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <header className="border-b border-ink-100">
-        <nav className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold text-ink-900">
-            JisokuDict
-          </Link>
-          <div className="flex items-center gap-6">
-            <Link href="/support" className="text-ink-600 hover:text-ink-900 transition">
-              Support
-            </Link>
-            <Link href="/privacy" className="text-sakura-600 font-medium">
-              Privacy
-            </Link>
-            <a
-              href={APP_STORE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-ink-900 text-white px-4 py-2 rounded-lg hover:bg-ink-700 transition"
-            >
-              Download
-            </a>
-          </div>
-        </nav>
-      </header>
+      <SiteHeader active="privacy" />
 
-      {/* Main Content */}
       <main className="flex-1 py-12">
         <div className="max-w-3xl mx-auto px-4 prose prose-ink">
           <h1 className="text-4xl font-bold text-ink-900 mb-2">Privacy Policy</h1>
-          <p className="text-ink-500 mb-8">Last updated: January 2025</p>
+          <p className="text-ink-500 mb-8">Last updated: April 2026</p>
 
           <section className="mb-8">
             <h2 className="text-2xl font-bold text-ink-900 mb-4">Introduction</h2>
             <p className="text-ink-600 mb-4">
-              JisokuDict (&quot;the App&quot;) is a Japanese-English dictionary application. This Privacy Policy explains how we collect, use, and protect your information when you use the App.
+              JisokuDict (&quot;the App&quot;) is a Japanese-English dictionary application. This Privacy Policy explains how we collect, use, and protect your information when you use the App or the JisokuDict Support service at jisoku.sukoshi.net/support.
             </p>
             <p className="text-ink-600">
               We are committed to protecting your privacy and being transparent about our data practices.
@@ -84,9 +61,51 @@ export default function PrivacyPage() {
           </section>
 
           <section className="mb-8">
+            <h2 className="text-2xl font-bold text-ink-900 mb-4">Support Tickets (jisoku.sukoshi.net/support)</h2>
+            <p className="text-ink-600 mb-4">
+              When you submit a support ticket through this website, we store the following on our database (SQLite, hosted on Railway with a persistent volume):
+            </p>
+            <ul className="list-disc list-inside text-ink-600 mb-4 space-y-2">
+              <li>The display name (username) you choose</li>
+              <li>The ticket title, category, and message body</li>
+              <li>Any subsequent messages you write on the ticket</li>
+              <li>A randomly generated identity token (hashed) tied to your browser&apos;s cookie</li>
+            </ul>
+            <p className="text-ink-600 mb-4">
+              <strong>We do not collect or store your email address.</strong> You don&apos;t need an account: instead, your access to your tickets is held in a private cookie on your browser, plus a one-time recovery URL we show you after submitting your first ticket. You can bookmark that URL to access your tickets from another device.
+            </p>
+            <p className="text-ink-600 mb-4">
+              If we mark a ticket as part of the public knowledge base, only the chosen <strong>username</strong> and the <strong>ticket content</strong> (title, body, replies) become publicly visible. The identity token, the recovery URL, and the cookie are never published or shared.
+            </p>
+            <p className="text-ink-600 mb-4">
+              <strong>If you lose both the cookie and the recovery URL, we have no way to recover access for you.</strong> We deliberately don&apos;t store anything that could be used to re-issue access — this keeps the system simple and your tickets private.
+            </p>
+
+            <h3 className="text-xl font-semibold text-ink-800 mb-3">Subprocessors</h3>
+            <ul className="list-disc list-inside text-ink-600 mb-4 space-y-2">
+              <li><strong>Cloudflare Turnstile</strong> - bot protection on the ticket submission form. Cloudflare may collect browser signals according to their policy.</li>
+              <li><strong>Railway</strong> - hosts the application and database.</li>
+            </ul>
+
+            <h3 className="text-xl font-semibold text-ink-800 mb-3">Retention</h3>
+            <ul className="list-disc list-inside text-ink-600 mb-4 space-y-2">
+              <li>Tickets and messages are retained for <strong>2 years</strong> from the last update, then purged.</li>
+              <li>Idle identity tokens (no associated tickets, no recent activity) are pruned periodically.</li>
+              <li>You can request deletion of a specific ticket by replying to it.</li>
+            </ul>
+
+            <p className="text-ink-600">
+              No third-party analytics or tracking is loaded on the support flow.
+            </p>
+          </section>
+
+          <section className="mb-8">
             <h2 className="text-2xl font-bold text-ink-900 mb-4">How We Use Your Information</h2>
             <p className="text-ink-600 mb-4">
               <strong>Local Data:</strong> Your search history and favorites are used solely to improve your experience within the App by providing quick access to your recent and saved items.
+            </p>
+            <p className="text-ink-600 mb-4">
+              <strong>Support Tickets:</strong> Used to respond to your requests, maintain a record of the conversation, and (when we publish a resolved ticket) help other users find answers.
             </p>
             <p className="text-ink-600">
               <strong>Advertising Data:</strong> Data collected by AdMob is used to serve relevant advertisements and to measure ad performance.
@@ -96,20 +115,10 @@ export default function PrivacyPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-bold text-ink-900 mb-4">Data Sharing</h2>
             <p className="text-ink-600 mb-4">
-              We do not sell, trade, or transfer your personal information to third parties.
+              We do not sell, trade, or transfer your personal information to third parties beyond the subprocessors listed above (which act on our behalf to operate the service).
             </p>
             <p className="text-ink-600">
-              The only third-party service that receives data is Google AdMob for advertising purposes. No other data leaves your device.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-bold text-ink-900 mb-4">Data Retention</h2>
-            <p className="text-ink-600 mb-4">
-              <strong>Local Data:</strong> Search history and favorites remain on your device until you delete them or uninstall the App. You can clear this data at any time through the App settings.
-            </p>
-            <p className="text-ink-600">
-              <strong>Advertising Data:</strong> Data collected by AdMob is retained according to Google&apos;s data retention policies.
+              Outside the App, the only third-party service that receives device data is Google AdMob for advertising purposes.
             </p>
           </section>
 
@@ -117,8 +126,11 @@ export default function PrivacyPage() {
             <h2 className="text-2xl font-bold text-ink-900 mb-4">Your Rights</h2>
             <p className="text-ink-600 mb-2">You have the right to:</p>
             <ul className="list-disc list-inside text-ink-600 mb-4 space-y-2">
-              <li><strong>Access</strong> your data stored in the App (visible in search history and favorites)</li>
+              <li><strong>Access</strong> your data stored in the App (visible in search history and favorites) and your support tickets at <Link href="/support/tickets" className="text-sakura-600 hover:text-sakura-700 underline">/support/tickets</Link></li>
+              <li><strong>Correct</strong> support ticket information by replying to the ticket</li>
               <li><strong>Delete</strong> your search history and favorites at any time</li>
+              <li><strong>Request deletion</strong> of a specific ticket by replying to it asking for deletion</li>
+              <li><strong>Forget</strong> your local cookie at any time by clearing your browser data — this also removes your recovery access on that browser</li>
               <li><strong>Opt out</strong> of personalized advertising through your device settings</li>
             </ul>
             <p className="text-ink-600">
@@ -170,27 +182,32 @@ export default function PrivacyPage() {
                   Google Ads Data Collection
                 </a>
               </li>
+              <li>
+                <a
+                  href="https://www.cloudflare.com/privacypolicy/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sakura-600 hover:text-sakura-700 underline"
+                >
+                  Cloudflare Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://railway.com/legal/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sakura-600 hover:text-sakura-700 underline"
+                >
+                  Railway Privacy Policy
+                </a>
+              </li>
             </ul>
           </section>
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-ink-100 py-8">
-        <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-ink-500 text-sm">
-            © {new Date().getFullYear()} JisokuDict
-          </p>
-          <div className="flex items-center gap-6 text-sm">
-            <Link href="/support" className="text-ink-500 hover:text-ink-900 transition">
-              Support
-            </Link>
-            <Link href="/privacy" className="text-ink-500 hover:text-ink-900 transition">
-              Privacy Policy
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   )
 }
