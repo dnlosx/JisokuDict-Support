@@ -77,7 +77,7 @@ All mutating routes require a same-origin `Origin` header (CSRF defense). All ro
 ```
 drizzle.config.ts
 drizzle/                              # generated migrations (committed)
-railway.json                          # preDeployCommand runs db:migrate
+railway.json                          # Railway deploy config
 .env.example                          # required env vars
 
 src/
@@ -144,7 +144,9 @@ Deployed on Railway with automatic deploys from `main` branch.
 
 The Railway service must have a **volume attached at `/data`** so the SQLite file survives redeploys. Set `DATABASE_PATH=/data/jisoku.db` as an env var on the service.
 
-`railway.json` runs `npm run db:migrate` as a pre-deploy command before starting the server (idempotent — applies any new migrations against the volume-backed DB).
+The `start` script runs `npm run db:migrate && next start` so migrations apply against the volume-mounted DB on every boot (idempotent — no-op once tables exist). Migrations are kept in the same container as the runtime; Railway's `preDeployCommand` was avoided because pre-deploy doesn't reliably mount the volume.
+
+The service must run as a **single replica** — SQLite + concurrent writers from multiple containers will corrupt the file.
 
 **Custom domain:** `jisoku.sukoshi.net`
 
