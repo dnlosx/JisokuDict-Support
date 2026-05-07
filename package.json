@@ -16,6 +16,9 @@
     "url": "git+https://github.com/dnlosx/JisokuDict-Support.git"
   },
   "license": "ISC",
+  "engines": {
+    "node": "22.x"
+  },
   "dependencies": {
     "@types/node": "^22.0.0",
     "@types/react": "^19.2.11",
