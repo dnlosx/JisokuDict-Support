@@ -32,7 +32,8 @@ npm run build     # Build for production
 ## Pages
 
 - `/` - Landing page
-- `/support` - Support & FAQ
+- `/support` - FAQ (with app screenshots) and contact form
+- `/admin` - Inbox for contact-form messages (password-protected)
 - `/privacy` - Privacy policy
 - `/app-ads.txt` - AdMob verification
 

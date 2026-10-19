@@ -13,3 +13,9 @@ body {
 .font-japanese {
   font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif;
 }
+
+@layer components {
+  .link {
+    @apply text-sakura-600 underline decoration-sakura-200 underline-offset-2 transition hover:text-sakura-700 hover:decoration-sakura-400;
+  }
+}

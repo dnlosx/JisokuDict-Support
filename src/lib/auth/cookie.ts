@@ -1,58 +1,12 @@
 import { createHmac, timingSafeEqual } from 'crypto'
-import { eq } from 'drizzle-orm'
 import { cookies } from 'next/headers'
 import type { NextResponse } from 'next/server'
-
-import { db } from '@/db'
-import { userTokens } from '@/db/schema'
-import { hashToken } from './tokens'
-
-// ----------------------------------------------------------------------------
-// User identity (anonymous): raw token in HTTP-only cookie, sha256 hash in DB
-// ----------------------------------------------------------------------------
-
-export const USER_COOKIE = 'jsk_user'
-const USER_COOKIE_TTL_SECONDS = 60 * 60 * 24 * 365 * 5 // 5 years
 
 const cookieFlags = {
   httpOnly: true as const,
   secure: process.env.NODE_ENV === 'production',
   sameSite: 'lax' as const,
   path: '/',
-}
-
-export function setUserCookie(res: NextResponse, rawToken: string) {
-  res.cookies.set(USER_COOKIE, rawToken, {
-    ...cookieFlags,
-    maxAge: USER_COOKIE_TTL_SECONDS,
-  })
-}
-
-export function clearUserCookie(res: NextResponse) {
-  res.cookies.set(USER_COOKIE, '', { ...cookieFlags, maxAge: 0 })
-}
-
-export async function getUserToken(): Promise<string | null> {
-  const store = await cookies()
-  return store.get(USER_COOKIE)?.value ?? null
-}
-
-export async function getUserTokenRecord(): Promise<{ id: string } | null> {
-  const raw = await getUserToken()
-  if (!raw) return null
-  const [row] = await db
-    .select({ id: userTokens.id })
-    .from(userTokens)
-    .where(eq(userTokens.tokenHash, hashToken(raw)))
-    .limit(1)
-  if (!row) return null
-  // best-effort last_seen_at update; do not block on failure
-  void db
-    .update(userTokens)
-    .set({ lastSeenAt: new Date() })
-    .where(eq(userTokens.id, row.id))
-    .catch(() => undefined)
-  return row
 }
 
 // ----------------------------------------------------------------------------

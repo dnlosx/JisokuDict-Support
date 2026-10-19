@@ -13,6 +13,8 @@ export const TICKET_STATUSES = ['open', 'in_progress', 'resolved', 'closed'] as 
 export const TICKET_VISIBILITIES = ['private', 'public'] as const
 export const MESSAGE_ROLES = ['user', 'admin'] as const
 
+// Legacy ticket system (user_tokens, tickets, ticket_messages). No UI reads or
+// writes these anymore; the tables are kept so old submissions aren't lost.
 export const userTokens = sqliteTable(
   'user_tokens',
   {
@@ -84,6 +86,27 @@ export const rateLimits = sqliteTable('rate_limits', {
   count: integer('count').notNull().default(0),
 })
 
+export const FEEDBACK_TOPICS = ['bug', 'feature', 'purchase', 'question', 'other'] as const
+
+export const feedback = sqliteTable(
+  'feedback',
+  {
+    id: text('id').primaryKey().$defaultFn(() => randomUUID()),
+    topic: text('topic', { enum: FEEDBACK_TOPICS }).notNull(),
+    message: text('message').notNull(),
+    email: text('email'),
+    device: text('device'),
+    appVersion: text('app_version'),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    handledAt: integer('handled_at', { mode: 'timestamp_ms' }),
+  },
+  (t) => ({
+    createdIdx: index('feedback_created_idx').on(t.createdAt),
+  })
+)
+
 export const ipBans = sqliteTable('ip_bans', {
   ip: text('ip').primaryKey(),
   path: text('path').notNull(),
@@ -91,6 +114,7 @@ export const ipBans = sqliteTable('ip_bans', {
   expiresAt: integer('expires_at', { mode: 'timestamp_ms' }).notNull(),
 })
 
+export type Feedback = typeof feedback.$inferSelect
 export type UserToken = typeof userTokens.$inferSelect
 export type NewUserToken = typeof userTokens.$inferInsert
 export type Ticket = typeof tickets.$inferSelect

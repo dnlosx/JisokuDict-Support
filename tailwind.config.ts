@@ -21,6 +21,17 @@ const config: Config = {
           800: '#962842',
           900: '#7d253a',
         },
+        // 藍 (indigo), from the app icon's gradient.
+        ai: {
+          50: '#f2f4fe',
+          100: '#e4e9fd',
+          200: '#c9d3fb',
+          300: '#a3b4f6',
+          400: '#7b91ee',
+          500: '#5f74e3',
+          600: '#4f5bd5',
+          700: '#4248b8',
+        },
         ink: {
           50: '#f6f6f7',
           100: '#e2e3e5',
@@ -37,6 +48,7 @@ const config: Config = {
       fontFamily: {
         sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
         japanese: ['Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', 'sans-serif'],
+        mincho: ['Hiragino Mincho ProN', 'Yu Mincho', 'YuMincho', 'Noto Serif JP', 'serif'],
       },
     },
   },

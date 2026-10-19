@@ -17,7 +17,7 @@ export default function PrivacyPage() {
       <main className="flex-1 py-12">
         <div className="max-w-3xl mx-auto px-4 prose prose-ink">
           <h1 className="text-4xl font-bold text-ink-900 mb-2">Privacy Policy</h1>
-          <p className="text-ink-500 mb-8">Last updated: April 2026</p>
+          <p className="text-ink-500 mb-8">Last updated: October 2026</p>
 
           <section className="mb-8">
             <h2 className="text-2xl font-bold text-ink-900 mb-4">Introduction</h2>
@@ -44,7 +44,7 @@ export default function PrivacyPage() {
 
             <h3 className="text-xl font-semibold text-ink-800 mb-3">iCloud Sync</h3>
             <p className="text-ink-600 mb-6">
-              If you are signed into iCloud, your favorites and search history may be synced across your devices using Apple&apos;s iCloud service. This data is protected by Apple&apos;s privacy policies and is not accessible to us.
+              If you are signed into iCloud, your favorites, flashcards, notes, study history and search history may be synced across your devices using Apple&apos;s iCloud service. This data is protected by Apple&apos;s privacy policies and is not accessible to us.
             </p>
 
             <h3 className="text-xl font-semibold text-ink-800 mb-3">Advertising Data</h3>
@@ -61,41 +61,36 @@ export default function PrivacyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-ink-900 mb-4">Support Tickets (jisoku.sukoshi.net/support)</h2>
+            <h2 className="text-2xl font-bold text-ink-900 mb-4">Support Messages (jisoku.sukoshi.net/support)</h2>
             <p className="text-ink-600 mb-4">
-              When you submit a support ticket through this website, we store the following on our database (SQLite, hosted on Railway with a persistent volume):
+              When you send a message through the contact form on this website, we store the following in our database (SQLite, hosted on Railway with a persistent volume):
             </p>
             <ul className="list-disc list-inside text-ink-600 mb-4 space-y-2">
-              <li>The display name (username) you choose</li>
-              <li>The ticket title, category, and message body</li>
-              <li>Any subsequent messages you write on the ticket</li>
-              <li>A randomly generated identity token (hashed) tied to your browser&apos;s cookie</li>
+              <li>The topic and the message you write</li>
+              <li>Your device and app version, if you choose to enter them</li>
+              <li>Your email address, <strong>only if you choose to enter it</strong></li>
             </ul>
             <p className="text-ink-600 mb-4">
-              <strong>We do not collect or store your email address.</strong> You don&apos;t need an account: instead, your access to your tickets is held in a private cookie on your browser, plus a one-time recovery URL we show you after submitting your first ticket. You can bookmark that URL to access your tickets from another device.
+              The email field is optional. If you leave it, we use it only to reply to that message. We never add it to a mailing list or share it. You don&apos;t need an account, and the form sets no cookies.
             </p>
             <p className="text-ink-600 mb-4">
-              If we mark a ticket as part of the public knowledge base, only the chosen <strong>username</strong> and the <strong>ticket content</strong> (title, body, replies) become publicly visible. The identity token, the recovery URL, and the cookie are never published or shared.
-            </p>
-            <p className="text-ink-600 mb-4">
-              <strong>If you lose both the cookie and the recovery URL, we have no way to recover access for you.</strong> We deliberately don&apos;t store anything that could be used to re-issue access — this keeps the system simple and your tickets private.
+              Messages are private. Only the developer can read them, and they are never published.
             </p>
 
             <h3 className="text-xl font-semibold text-ink-800 mb-3">Subprocessors</h3>
             <ul className="list-disc list-inside text-ink-600 mb-4 space-y-2">
-              <li><strong>Cloudflare Turnstile</strong> - bot protection on the ticket submission form. Cloudflare may collect browser signals according to their policy.</li>
+              <li><strong>Cloudflare Turnstile</strong> - bot protection on the contact form. Cloudflare may collect browser signals according to their policy.</li>
               <li><strong>Railway</strong> - hosts the application and database.</li>
             </ul>
 
             <h3 className="text-xl font-semibold text-ink-800 mb-3">Retention</h3>
             <ul className="list-disc list-inside text-ink-600 mb-4 space-y-2">
-              <li>Tickets and messages are retained for <strong>2 years</strong> from the last update, then purged.</li>
-              <li>Idle identity tokens (no associated tickets, no recent activity) are pruned periodically.</li>
-              <li>You can request deletion of a specific ticket by replying to it.</li>
+              <li>Messages are retained for <strong>2 years</strong>, then purged. This includes tickets sent through the earlier ticket system on this site.</li>
+              <li>You can ask us to delete your messages sooner by sending a request through the contact form.</li>
             </ul>
 
             <p className="text-ink-600">
-              No third-party analytics or tracking is loaded on the support flow.
+              No third-party analytics or tracking is loaded on the support pages.
             </p>
           </section>
 
@@ -105,7 +100,7 @@ export default function PrivacyPage() {
               <strong>Local Data:</strong> Your search history and favorites are used solely to improve your experience within the App by providing quick access to your recent and saved items.
             </p>
             <p className="text-ink-600 mb-4">
-              <strong>Support Tickets:</strong> Used to respond to your requests, maintain a record of the conversation, and (when we publish a resolved ticket) help other users find answers.
+              <strong>Support Messages:</strong> Used to fix bugs, answer your questions and, if you left an email, reply to you.
             </p>
             <p className="text-ink-600">
               <strong>Advertising Data:</strong> Data collected by AdMob is used to serve relevant advertisements and to measure ad performance.
@@ -126,11 +121,9 @@ export default function PrivacyPage() {
             <h2 className="text-2xl font-bold text-ink-900 mb-4">Your Rights</h2>
             <p className="text-ink-600 mb-2">You have the right to:</p>
             <ul className="list-disc list-inside text-ink-600 mb-4 space-y-2">
-              <li><strong>Access</strong> your data stored in the App (visible in search history and favorites) and your support tickets at <Link href="/support/tickets" className="text-sakura-600 hover:text-sakura-700 underline">/support/tickets</Link></li>
-              <li><strong>Correct</strong> support ticket information by replying to the ticket</li>
+              <li><strong>Access</strong> your data stored in the App (visible in search history and favorites)</li>
               <li><strong>Delete</strong> your search history and favorites at any time</li>
-              <li><strong>Request deletion</strong> of a specific ticket by replying to it asking for deletion</li>
-              <li><strong>Forget</strong> your local cookie at any time by clearing your browser data — this also removes your recovery access on that browser</li>
+              <li><strong>Request access to or deletion</strong> of your support messages through the <Link href="/support#contact" className="text-sakura-600 hover:text-sakura-700 underline">contact form</Link></li>
               <li><strong>Opt out</strong> of personalized advertising through your device settings</li>
             </ul>
             <p className="text-ink-600">

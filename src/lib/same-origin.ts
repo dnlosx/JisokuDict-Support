@@ -26,9 +26,11 @@ export function requireSameOrigin(req: NextRequest): boolean {
 }
 
 export function getClientIp(req: NextRequest): string | undefined {
+  // Prefer X-Real-IP (set by Railway's edge); X-Forwarded-For's first hop is
+  // client-controlled, so trusting it would let anyone dodge rate limits.
+  const real = req.headers.get('x-real-ip')?.trim()
+  if (real) return real
   const forwarded = req.headers.get('x-forwarded-for')
   if (forwarded) return forwarded.split(',')[0]?.trim() || undefined
-  const real = req.headers.get('x-real-ip')
-  if (real) return real
   return undefined
 }

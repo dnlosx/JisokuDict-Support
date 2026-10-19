@@ -15,45 +15,31 @@ npm run db:studio    # Open Drizzle Studio
 
 ## Architecture
 
-This is a Next.js 15 site for the JisokuDict iOS app. It serves as a landing page, an anonymous self-hosted support ticket system, a public knowledge base, and hosts `app-ads.txt` for AdMob verification.
+This is a Next.js 15 site for the JisokuDict iOS app. It serves as a landing page, a support page (FAQ + a one-way contact form whose messages land in a private admin inbox), and hosts `app-ads.txt` for AdMob verification.
 
 ### Stack
 
 - Next.js 15 (App Router) + React 19 + TypeScript + Tailwind CSS
 - SQLite (`better-sqlite3`) on a Railway volume + Drizzle ORM
 - Cloudflare Turnstile for bot protection
-- **No email infrastructure** — auth is cookie-based, not email-based
-- Markdown rendering via `react-markdown` + `remark-gfm` + `rehype-sanitize` (strict allowlist; `https://` images only)
+- **No email infrastructure** — the form's email field is optional and only used to reply manually
 - SQLite-backed rate limiting
 
-### Identity model (no accounts, no email)
+### Contact form & admin
 
-**Users:**
-- On first ticket submission, the server generates a 32-byte secret token, stores its sha256 hash in `user_tokens`, and sets the raw token in an HTTP-only `jsk_user` cookie (5-year max-age).
-- The same token is returned to the client as a recovery URL: `/support/restore?t=<raw_token>`. Users bookmark this URL to access their tickets from another device. **There is no email-based recovery** — losing both cookie and URL means losing access.
-- Subsequent submissions from the same browser reuse the cookie. The most recent username on the account is reused as the display name.
-
-**Admin:**
-- Single shared password in `ADMIN_SECRET` env var.
-- Admin types it at `/admin/auth` → `POST /api/admin/auth` does a constant-time compare → on success, mints an HMAC-signed cookie (`jsk_admin`, 30-day max-age) using `AUTH_SECRET`. No DB row.
-- `/admin*` routes call `isAdmin()` (cookie verify) and redirect to `/admin/auth` if not authenticated.
-- `POST /api/admin/auth` is rate-limited to 5/h/IP.
+- `/support` ends with a contact form (topic, message, optional email/device/app version, Turnstile). `POST /api/feedback` stores it in the `feedback` table. Users get no account, cookie or thread; it's one-way.
+- **Admin:** single shared password in `ADMIN_SECRET`. Admin types it at `/admin/auth` → `POST /api/admin/auth` does a constant-time compare → on success, mints an HMAC-signed cookie (`jsk_admin`, 30-day max-age) using `AUTH_SECRET`. `/admin` is the inbox (filter new/handled/all, mark handled).
+- **Weekly digest:** `GET /api/admin/digest?days=7` returns the last N days of messages as JSON, authenticated with `Authorization: Bearer $DIGEST_TOKEN` (endpoint is disabled if unset). A Claude scheduled task on the developer's Mac calls it every Friday and sends a summary only when there are messages. Call it with a non-bot User-Agent; `src/middleware.ts` returns 403 to `curl/…`.
+- **Legacy tickets:** the old ticket system (threads, public KB, recovery URLs) was removed. Its tables (`user_tokens`, `tickets`, `ticket_messages`) are kept in the schema and DB so old data isn't lost; old URLs redirect to `/support` (see `next.config.ts` and `src/app/support/restore/page.tsx`).
 
 ### Pages
 
 | Route | Auth | Purpose |
 |-------|------|---------|
 | `/` | Public | Landing page |
-| `/support` | Public | FAQ + entry points to ticket submission and the public KB |
-| `/support/public` | Public | Paginated public knowledge base |
-| `/support/public/[slug]` | Public | Read-only published ticket (username only) |
-| `/support/tickets/new` | Public | Create-ticket form (Turnstile). Auto-issues user cookie + recovery URL. |
-| `/support/tickets` | User cookie | Author's own tickets |
-| `/support/tickets/[slug]` | User cookie or admin | Thread + reply |
-| `/support/restore` | Token in `?t=` | Validates token, sets cookie, redirects to `/support/tickets` |
+| `/support` | Public | FAQ by topic with app screenshots + contact form (`#contact`) |
 | `/admin/auth` | Public | Admin password form |
-| `/admin` | Admin | Dashboard with status filter |
-| `/admin/tickets/[slug]` | Admin | Thread + status / visibility controls |
+| `/admin` | Admin | Inbox of contact-form messages |
 | `/privacy` | Public | Privacy policy |
 | `/app-ads.txt` | Public | AdMob verification (served from `public/`) |
 
@@ -61,14 +47,11 @@ This is a Next.js 15 site for the JisokuDict iOS app. It serves as a landing pag
 
 | Route | Method | Auth |
 |-------|--------|------|
+| `/api/feedback` | POST | Public + Turnstile + rate-limit (10/h/IP) |
 | `/api/admin/auth` | POST | Public + rate-limit (5/h/IP) |
 | `/api/admin/logout` | POST | Admin |
-| `/api/tickets` | POST | Public + Turnstile + rate-limit. Auto-creates user_token if no cookie. |
-| `/api/tickets` | GET | User cookie |
-| `/api/tickets/[slug]` | GET | Owner OR admin OR (visibility = public) |
-| `/api/tickets/[slug]/messages` | POST | Owner OR admin |
-| `/api/admin/tickets` | GET | Admin |
-| `/api/admin/tickets/[slug]` | PATCH | Admin (status, visibility) |
+| `/api/admin/feedback/[id]` | PATCH | Admin (`{ handled: boolean }`) |
+| `/api/admin/digest` | GET | Bearer `DIGEST_TOKEN` |
 
 All mutating routes require a same-origin `Origin` header (CSRF defense). All routes touching the DB declare `runtime = 'nodejs'`.
 
@@ -88,41 +71,38 @@ src/
 ├── app/
 │   ├── page.tsx                      # Landing
 │   ├── layout.tsx                    # Root layout
+│   ├── icon.png, apple-icon.png      # favicons (from the app icon)
 │   ├── globals.css                   # Tailwind styles
 │   ├── privacy/page.tsx
 │   ├── support/
-│   │   ├── page.tsx                  # FAQ + CTAs
-│   │   ├── tickets/{page,new/page,[slug]/page}.tsx
-│   │   ├── public/{page,[slug]/page}.tsx
-│   │   └── restore/page.tsx          # consumes recovery URL ?t=
+│   │   ├── page.tsx                  # FAQ topics + contact section
+│   │   ├── ContactForm.tsx           # client form → POST /api/feedback
+│   │   └── restore/page.tsx          # legacy recovery links → /support
 │   ├── admin/
 │   │   ├── auth/{page,AdminAuthForm}.tsx
-│   │   ├── page.tsx
-│   │   └── tickets/[slug]/page.tsx
+│   │   ├── page.tsx                  # inbox
+│   │   └── HandledToggle.tsx
 │   └── api/
-│       ├── admin/{auth,logout}/route.ts
-│       ├── admin/tickets/{route,[slug]/route}.ts
-│       ├── tickets/route.ts
-│       ├── tickets/[slug]/route.ts
-│       └── tickets/[slug]/messages/route.ts
-├── components/                       # SiteHeader, SiteFooter, Markdown,
-│                                     # TurnstileWidget, TicketCard, TicketThread,
-│                                     # ReplyForm, AdminTicketControls, SignOutButton
+│       ├── feedback/route.ts
+│       └── admin/{auth,logout,digest}/route.ts, admin/feedback/[id]/route.ts
+├── components/                       # SiteHeader, SiteFooter, TurnstileWidget, SignOutButton
 ├── db/
 │   ├── index.ts                      # client singleton
-│   ├── schema.ts                     # user_tokens, tickets, ticket_messages, rate_limits, ip_bans
+│   ├── schema.ts                     # feedback, rate_limits, ip_bans (+ legacy ticket tables)
 │   └── migrate.ts                    # migration runner (used by db:migrate)
+├── middleware.ts                     # scanner IP bans + bot UA filter
 └── lib/
-    ├── auth/{cookie,tokens}.ts       # user cookie + admin signed cookie + token gen/hash
+    ├── auth/cookie.ts                # admin signed cookie
     ├── turnstile.ts                  # siteverify
     ├── rate-limit.ts                 # SQLite-backed counter
     ├── ip-ban.ts                     # probe-path detection + 30-day IP bans
     ├── same-origin.ts                # CSRF guard + getClientIp
-    ├── slug.ts                       # nanoid public_id generator
-    └── validators.ts                 # zod schemas (create-ticket, reply, admin-auth, admin-update)
+    └── validators.ts                 # zod schemas (feedback, admin-auth, admin-update)
 
 public/
-└── app-ads.txt                       # AdMob verification
+├── app-ads.txt                       # AdMob verification
+├── app-icon.png
+└── screenshots/*.webp                # app screenshots (iPhone Duo simulator) used on /support
 ```
 
 ### Design
@@ -130,6 +110,8 @@ public/
 Uses a subset of the sukoshi.net design system:
 - `sakura` - Pink accent color
 - `ink` - Gray text colors
+- `ai` (藍) - Indigo accent from the app icon gradient
+- `font-mincho` - Serif stack for decorative kanji
 
 ### Environment variables
 
@@ -140,6 +122,7 @@ See `.env.example` for the full list. Required at runtime:
 - `ADMIN_SECRET` (the password admins type at `/admin/auth`)
 - `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
 - `NEXT_PUBLIC_SITE_URL`
+- `DIGEST_TOKEN` (optional; enables `/api/admin/digest` for the Friday summary)
 
 ## Deployment
 

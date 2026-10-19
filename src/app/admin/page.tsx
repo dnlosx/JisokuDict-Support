@@ -1,4 +1,4 @@
-import { and, desc, eq, type SQL } from 'drizzle-orm'
+import { count, desc, isNotNull, isNull } from 'drizzle-orm'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
@@ -6,26 +6,43 @@ import { redirect } from 'next/navigation'
 import { SignOutButton } from '@/components/SignOutButton'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
-import { TicketCategoryBadge, TicketStatusBadge, TicketVisibilityBadge } from '@/components/TicketBadges'
 import { db } from '@/db'
-import { tickets } from '@/db/schema'
+import { type Feedback, feedback } from '@/db/schema'
 import { isAdmin } from '@/lib/auth/cookie'
+
+import { HandledToggle } from './HandledToggle'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Admin - JisokuDict Support',
+  title: 'Inbox - JisokuDict Support',
   robots: { index: false, follow: false },
 }
 
-const STATUSES = ['open', 'in_progress', 'resolved', 'closed'] as const
-type StatusFilter = (typeof STATUSES)[number] | 'all'
+const FILTERS = ['new', 'handled', 'all'] as const
+type Filter = (typeof FILTERS)[number]
 
-const FMT = new Intl.DateTimeFormat('en-US', { dateStyle: 'short', timeStyle: 'short' })
+const TOPIC_LABELS: Record<Feedback['topic'], string> = {
+  bug: 'Bug',
+  feature: 'Idea',
+  purchase: 'Purchase',
+  question: 'Question',
+  other: 'Other',
+}
+
+const TOPIC_STYLES: Record<Feedback['topic'], string> = {
+  bug: 'bg-sakura-50 text-sakura-700 ring-sakura-200',
+  feature: 'bg-ai-50 text-ai-700 ring-ai-200',
+  purchase: 'bg-amber-50 text-amber-800 ring-amber-200',
+  question: 'bg-emerald-50 text-emerald-800 ring-emerald-200',
+  other: 'bg-ink-50 text-ink-700 ring-ink-200',
+}
+
+const FMT = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeStyle: 'short' })
 
 type Props = {
-  searchParams: Promise<{ status?: string }>
+  searchParams: Promise<{ filter?: string }>
 }
 
 export default async function AdminPage({ searchParams }: Props) {
@@ -33,118 +50,108 @@ export default async function AdminPage({ searchParams }: Props) {
     redirect('/admin/auth')
   }
 
-  const { status: statusParam } = await searchParams
-  const filter: StatusFilter =
-    statusParam && (STATUSES as readonly string[]).includes(statusParam)
-      ? (statusParam as StatusFilter)
-      : 'all'
+  const { filter: filterParam } = await searchParams
+  const filter: Filter = (FILTERS as readonly string[]).includes(filterParam ?? '')
+    ? (filterParam as Filter)
+    : 'new'
 
-  const conditions: SQL[] = []
-  if (filter !== 'all') {
-    conditions.push(eq(tickets.status, filter))
-  }
+  const where =
+    filter === 'new' ? isNull(feedback.handledAt) : filter === 'handled' ? isNotNull(feedback.handledAt) : undefined
 
-  const rows = await db
-    .select({
-      publicId: tickets.publicId,
-      title: tickets.title,
-      category: tickets.category,
-      status: tickets.status,
-      visibility: tickets.visibility,
-      authorUsername: tickets.authorUsername,
-      updatedAt: tickets.updatedAt,
-    })
-    .from(tickets)
-    .where(conditions.length > 0 ? and(...conditions) : undefined)
-    .orderBy(desc(tickets.updatedAt))
-    .limit(200)
+  const [rows, [{ value: newCount }]] = await Promise.all([
+    db.select().from(feedback).where(where).orderBy(desc(feedback.createdAt)).limit(200),
+    db.select({ value: count() }).from(feedback).where(isNull(feedback.handledAt)),
+  ])
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <SiteHeader active="support" />
+    <div className="min-h-screen flex flex-col bg-ink-50/50">
+      <SiteHeader />
       <main className="flex-1 py-12">
-        <div className="max-w-5xl mx-auto px-4">
-          <div className="flex items-center justify-between mb-8">
-            <h1 className="text-3xl font-bold text-ink-900">Admin</h1>
+        <div className="max-w-3xl mx-auto px-4">
+          <div className="flex items-center justify-between gap-4 mb-8">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight text-ink-900">Inbox</h1>
+              <p className="mt-1 text-sm text-ink-500">
+                {newCount === 0 ? 'All caught up.' : `${newCount} new ${newCount === 1 ? 'message' : 'messages'}`}
+              </p>
+            </div>
             <SignOutButton />
           </div>
 
-          <nav className="flex flex-wrap items-center gap-2 mb-6 text-sm">
-            <FilterTab label="All" href="/admin" active={filter === 'all'} />
-            {STATUSES.map((s) => (
-              <FilterTab
-                key={s}
-                label={s.replace('_', ' ')}
-                href={`/admin?status=${s}`}
-                active={filter === s}
-              />
+          <nav className="mb-6 inline-flex rounded-full border border-ink-200 bg-white p-1 text-sm">
+            {FILTERS.map((f) => (
+              <Link
+                key={f}
+                href={f === 'new' ? '/admin' : `/admin?filter=${f}`}
+                className={
+                  filter === f
+                    ? 'rounded-full bg-ink-900 px-4 py-1.5 capitalize text-white'
+                    : 'rounded-full px-4 py-1.5 capitalize text-ink-600 transition hover:text-ink-900'
+                }
+              >
+                {f}
+              </Link>
             ))}
           </nav>
 
           {rows.length === 0 ? (
-            <p className="text-ink-500 text-center py-12">No tickets match this filter.</p>
-          ) : (
-            <div className="overflow-hidden border border-ink-100 rounded-lg">
-              <table className="w-full text-sm">
-                <thead className="bg-ink-50 text-ink-700 text-left">
-                  <tr>
-                    <th className="px-4 py-2 font-medium">Title</th>
-                    <th className="px-4 py-2 font-medium">Status</th>
-                    <th className="px-4 py-2 font-medium">Category</th>
-                    <th className="px-4 py-2 font-medium">Author</th>
-                    <th className="px-4 py-2 font-medium">Updated</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-ink-100">
-                  {rows.map((t) => (
-                    <tr key={t.publicId} className="hover:bg-ink-50/40">
-                      <td className="px-4 py-3">
-                        <Link
-                          href={`/admin/tickets/${t.publicId}`}
-                          className="text-ink-900 hover:text-sakura-700 transition font-medium"
-                        >
-                          {t.title}
-                        </Link>
-                        {t.visibility === 'public' ? (
-                          <span className="ml-2 align-middle">
-                            <TicketVisibilityBadge visibility={t.visibility} />
-                          </span>
-                        ) : null}
-                      </td>
-                      <td className="px-4 py-3">
-                        <TicketStatusBadge status={t.status} />
-                      </td>
-                      <td className="px-4 py-3">
-                        <TicketCategoryBadge category={t.category} />
-                      </td>
-                      <td className="px-4 py-3 text-ink-900">{t.authorUsername}</td>
-                      <td className="px-4 py-3 text-ink-600 text-xs whitespace-nowrap">
-                        {FMT.format(new Date(t.updatedAt))}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="rounded-2xl border border-dashed border-ink-200 bg-white py-16 text-center text-ink-500">
+              {filter === 'new' ? 'No new messages.' : 'Nothing here yet.'}
             </div>
+          ) : (
+            <ul className="space-y-3">
+              {rows.map((f) => (
+                <li
+                  key={f.id}
+                  className={`rounded-2xl border bg-white p-5 shadow-sm ${f.handledAt ? 'border-ink-100 opacity-70' : 'border-ink-200'}`}
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-2.5">
+                      <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ${TOPIC_STYLES[f.topic]}`}>
+                        {TOPIC_LABELS[f.topic]}
+                      </span>
+                      <time dateTime={f.createdAt.toISOString()} className="text-xs text-ink-500">
+                        {FMT.format(f.createdAt)}
+                      </time>
+                    </div>
+                    <HandledToggle id={f.id} handled={f.handledAt !== null} />
+                  </div>
+
+                  <p className="mt-4 whitespace-pre-wrap break-words text-ink-800 leading-relaxed">{f.message}</p>
+
+                  {(f.email || f.device || f.appVersion) && (
+                    <dl className="mt-4 flex flex-wrap gap-x-6 gap-y-1 border-t border-ink-100 pt-3 text-xs text-ink-500">
+                      {f.email && (
+                        <div className="flex gap-1.5">
+                          <dt>Email</dt>
+                          <dd>
+                            <a href={`mailto:${f.email}?subject=${encodeURIComponent('Re: your JisokuDict message')}`} className="link">
+                              {f.email}
+                            </a>
+                          </dd>
+                        </div>
+                      )}
+                      {f.device && (
+                        <div className="flex gap-1.5">
+                          <dt>Device</dt>
+                          <dd className="text-ink-700">{f.device}</dd>
+                        </div>
+                      )}
+                      {f.appVersion && (
+                        <div className="flex gap-1.5">
+                          <dt>Version</dt>
+                          <dd className="text-ink-700">{f.appVersion}</dd>
+                        </div>
+                      )}
+                    </dl>
+                  )}
+                </li>
+              ))}
+            </ul>
           )}
         </div>
       </main>
       <SiteFooter />
     </div>
-  )
-}
-
-function FilterTab({ label, href, active }: { label: string; href: string; active: boolean }) {
-  return (
-    <Link
-      href={href}
-      className={
-        active
-          ? 'px-3 py-1 rounded-full bg-ink-900 text-white capitalize'
-          : 'px-3 py-1 rounded-full bg-ink-50 text-ink-700 hover:bg-ink-100 transition capitalize'
-      }
-    >
-      {label}
-    </Link>
   )
 }
