@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 
+import { Screenshot } from '@/components/Screenshot'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
 
@@ -299,11 +300,11 @@ function Hero() {
         </div>
 
         <div className="relative mx-auto h-[360px] w-full max-w-[440px] sm:h-[440px]" aria-hidden>
-          <Shot
+          <Screenshot
             src="/screenshots/word.webp"
             className="absolute left-0 top-6 w-[62%] -rotate-[5deg] opacity-95"
           />
-          <Shot
+          <Screenshot
             src="/screenshots/kanji.webp"
             className="absolute right-0 top-0 w-[66%] rotate-[3deg] shadow-2xl shadow-ai-500/20"
           />
@@ -353,24 +354,11 @@ function TopicSection({ topic, flip }: { topic: Topic; flip: boolean }) {
               className="w-full rounded-2xl border border-ink-100 bg-white shadow-xl shadow-ai-500/10"
             />
           ) : (
-            <Shot src={topic.shot.src} alt={topic.shot.alt} className="mx-auto w-full max-w-[300px]" />
+            <Screenshot src={topic.shot.src} alt={topic.shot.alt} className="mx-auto w-full max-w-[300px]" />
           )}
         </div>
       </div>
     </section>
-  )
-}
-
-function Shot({ src, alt = '', className = '' }: { src: string; alt?: string; className?: string }) {
-  return (
-    <img
-      src={src}
-      alt={alt}
-      width={985}
-      height={1400}
-      loading="lazy"
-      className={`rounded-[1.6rem] border-[6px] border-ink-900 bg-white shadow-xl ${className}`}
-    />
   )
 }
 

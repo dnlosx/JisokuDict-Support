@@ -36,7 +36,7 @@ This is a Next.js 15 site for the JisokuDict iOS app. It serves as a landing pag
 
 | Route | Auth | Purpose |
 |-------|------|---------|
-| `/` | Public | Landing page |
+| `/` | Public | Landing page (features, iPhone Duo folded/unfolded section, App Store CTA) |
 | `/support` | Public | FAQ by topic with app screenshots + contact form (`#contact`) |
 | `/admin/auth` | Public | Admin password form |
 | `/admin` | Admin | Inbox of contact-form messages |
@@ -102,7 +102,8 @@ src/
 public/
 ├── app-ads.txt                       # AdMob verification
 ├── app-icon.png
-└── screenshots/*.webp                # app screenshots (iPhone Duo simulator) used on /support
+└── screenshots/                      # iPhone Duo simulator shots: *.webp (unfolded portrait, /support),
+                                      # duo-open-*.webp (unfolded landscape) + duo-folded-*.webp (outer screen) on /
 ```
 
 ### Design
