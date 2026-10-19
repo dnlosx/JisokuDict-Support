@@ -15,6 +15,13 @@
       "when": 1777589318435,
       "tag": "0001_sudden_starbolt",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1791871803035,
+      "tag": "0002_mushy_bushwacker",
+      "breakpoints": true
     }
   ]
 }

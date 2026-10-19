@@ -1,0 +1,15 @@
+User-agent: Googlebot
+User-agent: bingbot
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /support/tickets
+Disallow: /support/restore
+
+User-agent: Google-adstxt
+Allow: /app-ads.txt$
+Disallow: /
+
+User-agent: *
+Disallow: /

@@ -72,6 +72,10 @@ This is a Next.js 15 site for the JisokuDict iOS app. It serves as a landing pag
 
 All mutating routes require a same-origin `Origin` header (CSRF defense). All routes touching the DB declare `runtime = 'nodejs'`.
 
+### Scanner bans
+
+`src/middleware.ts` runs on the Node runtime. Any request for a probe path (`.env`, `.git`, `*.php`, `wp-*`, etc.; see `src/lib/ip-ban.ts`) bans the client IP for 30 days in `ip_bans`, and banned IPs get 403 on every route. The IP comes from Railway's `X-Real-IP` header only (never `X-Forwarded-For`, which clients can spoof); without it, as in local dev, banning is skipped. To unban: `DELETE FROM ip_bans WHERE ip = '...'`.
+
 ### Project Structure
 
 ```
@@ -106,12 +110,13 @@ src/
 │                                     # ReplyForm, AdminTicketControls, SignOutButton
 ├── db/
 │   ├── index.ts                      # client singleton
-│   ├── schema.ts                     # user_tokens, tickets, ticket_messages, rate_limits
+│   ├── schema.ts                     # user_tokens, tickets, ticket_messages, rate_limits, ip_bans
 │   └── migrate.ts                    # migration runner (used by db:migrate)
 └── lib/
     ├── auth/{cookie,tokens}.ts       # user cookie + admin signed cookie + token gen/hash
     ├── turnstile.ts                  # siteverify
     ├── rate-limit.ts                 # SQLite-backed counter
+    ├── ip-ban.ts                     # probe-path detection + 30-day IP bans
     ├── same-origin.ts                # CSRF guard + getClientIp
     ├── slug.ts                       # nanoid public_id generator
     └── validators.ts                 # zod schemas (create-ticket, reply, admin-auth, admin-update)

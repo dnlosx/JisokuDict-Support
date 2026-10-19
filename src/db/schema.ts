@@ -84,6 +84,13 @@ export const rateLimits = sqliteTable('rate_limits', {
   count: integer('count').notNull().default(0),
 })
 
+export const ipBans = sqliteTable('ip_bans', {
+  ip: text('ip').primaryKey(),
+  path: text('path').notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp_ms' }).notNull(),
+  expiresAt: integer('expires_at', { mode: 'timestamp_ms' }).notNull(),
+})
+
 export type UserToken = typeof userTokens.$inferSelect
 export type NewUserToken = typeof userTokens.$inferInsert
 export type Ticket = typeof tickets.$inferSelect
