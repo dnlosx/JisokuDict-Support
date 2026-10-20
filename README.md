@@ -4,7 +4,7 @@ Landing page and support site for **JisokuDict** - a Japanese-English dictionary
 
 ## Links
 
-- **Website:** [jisoku.sukoshi.net](https://jisoku.sukoshi.net)
+- **Website:** [jisoku.app](https://jisoku.app)
 - **App Store:** [Download on the App Store](https://apps.apple.com/us/app/jisokudict/id6757970596)
 - **Issues:** [Report a bug or request a feature](https://github.com/dnlosx/JisokuDict-Support/issues)
 

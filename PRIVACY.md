@@ -4,7 +4,7 @@
 
 ## Introduction
 
-JisokuDict ("the App") is a Japanese-English dictionary application. This Privacy Policy explains how we collect, use, and protect your information when you use the App or the JisokuDict Support service at jisoku.sukoshi.net/support.
+JisokuDict ("the App") is a Japanese-English dictionary application. This Privacy Policy explains how we collect, use, and protect your information when you use the App or the JisokuDict Support service at jisoku.app/support.
 
 We are committed to protecting your privacy and being transparent about our data practices.
 
@@ -34,7 +34,7 @@ The App uses Google AdMob to display advertisements. AdMob may collect:
 
 This data is collected by Google and is subject to Google's Privacy Policy.
 
-## Support Tickets (jisoku.sukoshi.net/support)
+## Support Tickets (jisoku.app/support)
 
 When you submit a support ticket through this website, we store the following on our database (SQLite, hosted on Railway with a persistent volume):
 

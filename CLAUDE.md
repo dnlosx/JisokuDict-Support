@@ -137,10 +137,18 @@ The `start` script runs `npm run db:migrate && next start` so migrations apply a
 
 The service must run as a **single replica** — SQLite + concurrent writers from multiple containers will corrupt the file.
 
-**Custom domain:** `jisoku.sukoshi.net`
+**Custom domain:** `jisoku.app` (canonical). The old `jisoku.sukoshi.net` stays attached to the service; `src/middleware.ts` 308-redirects it to `jisoku.app`, except `/app-ads.txt` and `/api/*` (served on both hosts so AdMob and the digest job keep working with the old URL).
 
 ### DNS (Porkbun)
 
+`jisoku.app` (apex; Porkbun flattens it):
+```
+Type:  ALIAS
+Name:  (blank)
+Value: f1oc00en.up.railway.app
+```
+
+`jisoku.sukoshi.net` (legacy):
 ```
 Type:  CNAME
 Name:  jisoku

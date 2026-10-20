@@ -22,7 +22,7 @@ export default function PrivacyPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-bold text-ink-900 mb-4">Introduction</h2>
             <p className="text-ink-600 mb-4">
-              JisokuDict (&quot;the App&quot;) is a Japanese-English dictionary application. This Privacy Policy explains how we collect, use, and protect your information when you use the App or the JisokuDict Support service at jisoku.sukoshi.net/support.
+              JisokuDict (&quot;the App&quot;) is a Japanese-English dictionary application. This Privacy Policy explains how we collect, use, and protect your information when you use the App or the JisokuDict Support service at jisoku.app/support.
             </p>
             <p className="text-ink-600">
               We are committed to protecting your privacy and being transparent about our data practices.
@@ -61,7 +61,7 @@ export default function PrivacyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-ink-900 mb-4">Support Messages (jisoku.sukoshi.net/support)</h2>
+            <h2 className="text-2xl font-bold text-ink-900 mb-4">Support Messages (jisoku.app/support)</h2>
             <p className="text-ink-600 mb-4">
               When you send a message through the contact form on this website, we store the following in our database (SQLite, hosted on Railway with a persistent volume):
             </p>
