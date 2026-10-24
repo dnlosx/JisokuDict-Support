@@ -4,6 +4,7 @@ import { banIp, isBanned, isProbePath } from '@/lib/ip-ban'
 
 // User agents are self-reported: this filters known bots, not disguised traffic.
 const searchCrawler = /(?:^|[\s;(])(?:Googlebot(?:-Image|-Video|-News)?|bingbot|DuckDuckBot)(?:[\/\s;)]|$)/i
+const aiCrawler = /(?:^|[\s;(])(?:Applebot(?:-Extended)?|Amazonbot|Amzn-SearchBot|Amzn-User|ClaudeBot|Claude-User|Claude-SearchBot|anthropic-ai|GPTBot|OAI-SearchBot|ChatGPT-User)(?:[\/\s;)]|$)/i
 const adsCrawler = /(?:^|[\s;(])Google-adstxt(?:[\/\s;)]|$)/i
 const knownBot = /bot|spider|crawler|slurp|scrapy|headlesschrome|facebookexternalhit|facebot|meta-externalagent|meta-externalfetcher|bytespider|censysinspect|netcraft|palo alto networks|visionheight\.com\/scan|python-requests|python-urllib|go-http-client|curl\/|wget\/|googleother|google-adstxt|mediapartners-google|adsbot-google|google-inspectiontool|google-storebot|sellers\.json/i
 
@@ -46,7 +47,7 @@ export function middleware(request: NextRequest) {
   if (path === '/robots.txt') return NextResponse.next()
 
   const ua = request.headers.get('user-agent') ?? ''
-  if (searchCrawler.test(ua)) return NextResponse.next()
+  if (searchCrawler.test(ua) || aiCrawler.test(ua)) return NextResponse.next()
   if (path === '/app-ads.txt' && adsCrawler.test(ua)) return NextResponse.next()
 
   if (knownBot.test(ua)) return forbidden()
