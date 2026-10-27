@@ -41,7 +41,12 @@ This is a Next.js 15 site for the JisokuDict iOS app. It serves as a landing pag
 | `/admin/auth` | Public | Admin password form |
 | `/admin` | Admin | Inbox of contact-form messages |
 | `/privacy` | Public | Privacy policy |
+| `/es/support`, `/es/privacy` | Public | Spanish (Mexico) translations; `/es` redirects to `/es/support` |
 | `/app-ads.txt` | Public | AdMob verification (served from `public/`) |
+
+### Spanish pages
+
+`src/app/(en)` and `src/app/es` are route groups with their own root layouts, so each sets the right `<html lang>`. Only `/support` and `/privacy` are translated (`TRANSLATED_PATHS` in `src/lib/i18n.ts`); those pages emit hreflang alternates and the header shows a language switch. The app's UI is English/Japanese only, so Spanish FAQ answers keep the English button names. The Spanish privacy policy (`src/app/es/privacy/page.tsx`) is a sentence-by-sentence translation: change both files together. App Store Connect's Spanish (Mexico) listing links to `https://jisoku.app/es/privacy`.
 
 ### API routes
 
@@ -69,23 +74,28 @@ railway.json                          # Railway deploy config
 
 src/
 ├── app/
-│   ├── page.tsx                      # Landing
-│   ├── layout.tsx                    # Root layout
 │   ├── icon.png, apple-icon.png      # favicons (from the app icon)
 │   ├── globals.css                   # Tailwind styles
-│   ├── privacy/page.tsx
-│   ├── support/
-│   │   ├── page.tsx                  # FAQ topics + contact section
-│   │   ├── ContactForm.tsx           # client form → POST /api/feedback
-│   │   └── restore/page.tsx          # legacy recovery links → /support
-│   ├── admin/
-│   │   ├── auth/{page,AdminAuthForm}.tsx
-│   │   ├── page.tsx                  # inbox
-│   │   └── HandledToggle.tsx
+│   ├── (en)/                         # English pages (root layout, lang="en")
+│   │   ├── layout.tsx
+│   │   ├── page.tsx                  # Landing
+│   │   ├── privacy/page.tsx
+│   │   ├── support/
+│   │   │   ├── page.tsx              # renders <SupportView locale="en">
+│   │   │   └── restore/page.tsx      # legacy recovery links → /support
+│   │   └── admin/
+│   │       ├── auth/{page,AdminAuthForm}.tsx
+│   │       ├── page.tsx              # inbox
+│   │       └── HandledToggle.tsx
+│   ├── es/                           # Spanish pages (root layout, lang="es-MX")
+│   │   ├── layout.tsx
+│   │   ├── privacy/page.tsx
+│   │   └── support/page.tsx
 │   └── api/
 │       ├── feedback/route.ts
 │       └── admin/{auth,logout,digest}/route.ts, admin/feedback/[id]/route.ts
-├── components/                       # SiteHeader, SiteFooter, TurnstileWidget, SignOutButton
+├── components/                       # SiteHeader, SiteFooter, SupportView (FAQ, both locales),
+│                                     # ContactForm, TurnstileWidget, SignOutButton
 ├── db/
 │   ├── index.ts                      # client singleton
 │   ├── schema.ts                     # feedback, rate_limits, ip_bans (+ legacy ticket tables)
@@ -97,6 +107,7 @@ src/
     ├── rate-limit.ts                 # SQLite-backed counter
     ├── ip-ban.ts                     # probe-path detection + 30-day IP bans
     ├── same-origin.ts                # CSRF guard + getClientIp
+    ├── i18n.ts                       # Locale type, translated paths, hreflang alternates
     └── validators.ts                 # zod schemas (feedback, admin-auth, admin-update)
 
 public/

@@ -3,16 +3,18 @@ import Link from 'next/link'
 
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
+import { alternates } from '@/lib/i18n'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy - JisokuDict',
   description: 'Privacy policy for JisokuDict Japanese dictionary app and the JisokuDict Support service.',
+  alternates: alternates('en', '/privacy'),
 }
 
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen flex flex-col">
-      <SiteHeader active="privacy" />
+      <SiteHeader active="privacy" translatedPath="/privacy" />
 
       <main className="flex-1 py-12">
         <div className="max-w-3xl mx-auto px-4 prose prose-ink">

@@ -7,6 +7,7 @@ type Props = {
   onToken: (token: string) => void
   onExpire?: () => void
   className?: string
+  language?: string
 }
 
 declare global {
@@ -20,6 +21,7 @@ declare global {
           'expired-callback'?: () => void
           'error-callback'?: () => void
           theme?: 'light' | 'dark' | 'auto'
+          language?: string
         }
       ) => string
       reset: (widgetId?: string) => void
@@ -27,7 +29,7 @@ declare global {
   }
 }
 
-export function TurnstileWidget({ onToken, onExpire, className }: Props) {
+export function TurnstileWidget({ onToken, onExpire, className, language }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const widgetIdRef = useRef<string | null>(null)
   const callbackRef = useRef({ onToken, onExpire })
@@ -52,6 +54,7 @@ export function TurnstileWidget({ onToken, onExpire, className }: Props) {
         'expired-callback': () => callbackRef.current.onExpire?.(),
         'error-callback': () => callbackRef.current.onExpire?.(),
         theme: 'light',
+        language,
       })
     }
 
@@ -59,7 +62,7 @@ export function TurnstileWidget({ onToken, onExpire, className }: Props) {
     return () => {
       cancelled = true
     }
-  }, [siteKey])
+  }, [siteKey, language])
 
   if (!siteKey) {
     return (

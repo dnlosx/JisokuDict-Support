@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
       { source: '/support/tickets/:path*', destination: '/support#contact', permanent: true },
       { source: '/support/public/:path*', destination: '/support', permanent: true },
       { source: '/admin/tickets/:path*', destination: '/admin', permanent: false },
+      // No Spanish landing page yet; temporary so one can take over /es later.
+      { source: '/es', destination: '/es/support', permanent: false },
     ]
   },
 }
