@@ -19,9 +19,6 @@ Disallow: /api/
 Disallow: /support/tickets
 Disallow: /support/restore
 
-User-agent: Google-adstxt
-Allow: /app-ads.txt$
-Disallow: /
-
 User-agent: *
+Allow: /app-ads.txt$
 Disallow: /

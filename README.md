@@ -40,9 +40,9 @@ npm run build     # Build for production
 ## Crawler policy
 
 `public/robots.txt` permits Googlebot, Bingbot, and DuckDuckBot on public content and asks
-other crawlers to stay out. Google-adstxt can read `/app-ads.txt` for AdMob.
+other crawlers to stay out. Any crawler can read `/app-ads.txt` for AdMob.
 `src/middleware.ts` returns 403 for recognized other bots and automation clients,
-including on static assets and API routes; `/robots.txt` remains readable.
+including on static assets and API routes; `/robots.txt` and `/app-ads.txt` remain readable.
 This also blocks other search crawlers and many social link previews.
 
 This is a user-agent filter, not verified bot identity: clients can impersonate
