@@ -1,5 +1,5 @@
 import { ContactForm } from '@/components/ContactForm'
-import { Screenshot } from '@/components/Screenshot'
+import { DeviceFrame } from '@/components/landing/DeviceFrame'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
 import { localePath, type Locale } from '@/lib/i18n'
@@ -11,7 +11,8 @@ type Topic = {
   kanji: string
   title: string
   blurb: string
-  shot: { src: string; alt: string; crop?: boolean }
+  /** An Indigo-theme capture in public/shots/en; without `file`, the drawn Settings screen. */
+  shot: { file?: string; alt: string }
   faqs: Faq[]
 }
 
@@ -22,7 +23,7 @@ const TOPICS: Record<Locale, Topic[]> = {
       kanji: '買',
       title: 'Purchases & ads',
       blurb: 'Removing ads, restoring a purchase, and refunds.',
-      shot: { src: '/screenshots/settings.webp', alt: 'Jisoku Settings showing Ads Removed and Restore Purchases' },
+      shot: { alt: 'Jisoku Settings showing Ads Removed and Restore Purchases' },
       faqs: [
         {
           q: 'How do I remove ads?',
@@ -62,7 +63,7 @@ const TOPICS: Record<Locale, Topic[]> = {
       kanji: '雲',
       title: 'Sync & your data',
       blurb: 'iCloud, offline use, and fixing search problems.',
-      shot: { src: '/screenshots/today.webp', alt: 'Jisoku Today screen with Word of the Day and cards due', crop: true },
+      shot: { file: 'favorites', alt: 'Jisoku Favorites list, which syncs through iCloud' },
       faqs: [
         {
           q: 'Is my data backed up?',
@@ -100,7 +101,7 @@ const TOPICS: Record<Locale, Topic[]> = {
       kanji: '習',
       title: 'Study & streaks',
       blurb: 'Flashcards, daily reminders and the stamp book.',
-      shot: { src: '/screenshots/stamps.webp', alt: 'Jisoku Stamp Book with streak stamps earned' },
+      shot: { file: 'study', alt: 'Jisoku flashcard review with the Know and Don’t Know buttons' },
       faqs: [
         {
           q: 'How do I add words to study?',
@@ -136,7 +137,7 @@ const TOPICS: Record<Locale, Topic[]> = {
       kanji: '探',
       title: 'Search & dictionary',
       blurb: 'Romaji, camera search, kanji lookup and widgets.',
-      shot: { src: '/screenshots/kanji.webp', alt: 'Jisoku kanji page for 桜 with stroke order and readings' },
+      shot: { file: 'search', alt: 'Jisoku search for “nomu” typed in romaji, finding the kanji 呑 and the word 飲む' },
       faqs: [
         {
           q: 'Do I need a Japanese keyboard?',
@@ -183,7 +184,7 @@ const TOPICS: Record<Locale, Topic[]> = {
       kanji: '買',
       title: 'Compras y anuncios',
       blurb: 'Quitar anuncios, restaurar una compra y reembolsos.',
-      shot: { src: '/screenshots/settings.webp', alt: 'Settings de Jisoku con Ads Removed y Restore Purchases' },
+      shot: { alt: 'Settings de Jisoku con Ads Removed y Restore Purchases' },
       faqs: [
         {
           q: '¿Cómo quito los anuncios?',
@@ -224,7 +225,7 @@ const TOPICS: Record<Locale, Topic[]> = {
       kanji: '雲',
       title: 'Sincronización y tus datos',
       blurb: 'iCloud, uso sin conexión y problemas con la búsqueda.',
-      shot: { src: '/screenshots/today.webp', alt: 'Pantalla Today de Jisoku con la palabra del día y tarjetas pendientes', crop: true },
+      shot: { file: 'favorites', alt: 'Lista Favorites de Jisoku, que se sincroniza con iCloud' },
       faqs: [
         {
           q: '¿Mis datos tienen respaldo?',
@@ -264,7 +265,7 @@ const TOPICS: Record<Locale, Topic[]> = {
       kanji: '習',
       title: 'Estudio y rachas',
       blurb: 'Tarjetas, recordatorios diarios y el libro de sellos.',
-      shot: { src: '/screenshots/stamps.webp', alt: 'Stamp Book de Jisoku con sellos de racha obtenidos' },
+      shot: { file: 'study', alt: 'Repaso de tarjetas en Jisoku con los botones Know y Don’t Know' },
       faqs: [
         {
           q: '¿Cómo agrego palabras para estudiar?',
@@ -302,7 +303,7 @@ const TOPICS: Record<Locale, Topic[]> = {
       kanji: '探',
       title: 'Búsqueda y diccionario',
       blurb: 'Romaji, búsqueda con la cámara, kanji y widgets.',
-      shot: { src: '/screenshots/kanji.webp', alt: 'Página del kanji 桜 en Jisoku con orden de trazos y lecturas' },
+      shot: { file: 'search', alt: 'Búsqueda de “nomu” escrito en romaji en Jisoku, que encuentra el kanji 呑 y la palabra 飲む' },
       faqs: [
         {
           q: '¿Necesito un teclado japonés?',
@@ -509,15 +510,18 @@ function Hero({ t, firstTopic }: { t: (typeof STRINGS)[Locale]; firstTopic: stri
           </div>
         </div>
 
-        <div className="relative mx-auto h-[360px] w-full max-w-[440px] sm:h-[440px]" aria-hidden>
-          <Screenshot
-            src="/screenshots/word.webp"
-            className="absolute left-0 top-6 w-[62%] -rotate-[5deg] opacity-95 shadow-ai-900/15"
-          />
-          <Screenshot
-            src="/screenshots/kanji.webp"
-            className="absolute right-0 top-0 w-[66%] rotate-[3deg] shadow-2xl shadow-ai-900/30"
-          />
+        {/* Two phones rising from the hero's bottom edge, which clips them. */}
+        <div className="relative mx-auto -mb-20 h-[400px] w-full max-w-[460px] sm:-mb-24 sm:h-[520px]" aria-hidden>
+          <div className="absolute left-0 top-12 w-[52%] -rotate-[6deg]">
+            <DeviceFrame>
+              <Shot file="word" />
+            </DeviceFrame>
+          </div>
+          <div className="absolute right-0 top-0 w-[58%] rotate-[4deg]">
+            <DeviceFrame>
+              <Shot file="kanji" priority />
+            </DeviceFrame>
+          </div>
         </div>
       </div>
     </section>
@@ -548,23 +552,104 @@ function TopicSection({ topic, flip }: { topic: Topic; flip: boolean }) {
       </div>
 
       <div className={`lg:sticky lg:top-24 ${flip ? 'lg:order-1' : ''}`}>
-        <div className="rounded-3xl border border-ink-100 bg-app-bg p-6 sm:p-10">
-          {topic.shot.crop ? (
-            <img
-              src={topic.shot.src}
-              alt={topic.shot.alt}
-              width={985}
-              height={560}
-              loading="lazy"
-              className="w-full rounded-2xl border border-ink-100 bg-white shadow-xl shadow-ai-900/15"
-            />
-          ) : (
-            <Screenshot src={topic.shot.src} alt={topic.shot.alt} className="mx-auto w-full max-w-[300px] shadow-ai-900/15" />
-          )}
+        <div className="rounded-3xl border border-ink-100 bg-app-bg px-6 py-8 sm:py-10">
+          <DeviceFrame statusBar={!topic.shot.file} className="max-w-[250px]">
+            {topic.shot.file ? <Shot file={topic.shot.file} alt={topic.shot.alt} /> : <SettingsScreen label={topic.shot.alt} />}
+          </DeviceFrame>
         </div>
       </div>
     </section>
   )
+}
+
+/** An iPhone capture from public/shots/en, sized for DeviceFrame's screen. */
+function Shot({ file, alt = '', priority = false }: { file: string; alt?: string; priority?: boolean }) {
+  return <img src={`/shots/en/${file}.webp`} alt={alt} width={660} height={1435} loading={priority ? 'eager' : 'lazy'} decoding="async" />
+}
+
+/**
+ * The app's Settings screen with Remove Ads bought, drawn in the Indigo theme
+ * (there is no capture of it). Sizes are in em, where 1em is 17 iOS points at
+ * the frame's width; labels are the app's own English ones in both locales.
+ */
+function SettingsScreen({ label }: { label: string }) {
+  return (
+    <div
+      role="img"
+      aria-label={label}
+      className="h-full bg-app-bg px-[0.95em] text-left text-ink-900"
+      style={{ fontSize: 'calc(var(--pt) * 17)', paddingTop: 'calc(var(--safe-top) + 0.5em)' }}
+    >
+      <span className="inline-flex rounded-full bg-white px-[0.9em] py-[0.5em] font-medium leading-none text-app shadow-sm">Done</span>
+      <p className="mt-[0.45em] text-[2em] font-bold leading-tight tracking-tight">Settings</p>
+
+      <SettingsGroup title="Premium">
+        <SettingsRow>
+          <svg viewBox="0 0 24 24" className="h-[1.3em] w-[1.3em] shrink-0 text-green-600" fill="currentColor">
+            <path d="M12 1.8l2.3 1.9 3-.2.9 2.9 2.5 1.6-1 2.8 1 2.8-2.5 1.6-.9 2.9-3-.2L12 22.2l-2.3-1.9-3 .2-.9-2.9-2.5-1.6 1-2.8-1-2.8 2.5-1.6.9-2.9 3 .2z" />
+            <path d="M8.3 12.3l2.6 2.6 4.9-5.2" fill="none" stroke="#fff" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <span className="text-green-600">Ads Removed</span>
+          <span className="ml-auto text-ink-400">Purchased</span>
+        </SettingsRow>
+        <SettingsRow>
+          <svg viewBox="0 0 24 24" className="h-[1.3em] w-[1.3em] shrink-0 text-app" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19.5 12a7.5 7.5 0 11-2.4-5.5M19.6 3.2v3.9h-3.9" />
+          </svg>
+          <span className="text-app">Restore Purchases</span>
+        </SettingsRow>
+      </SettingsGroup>
+
+      <SettingsGroup title="Display">
+        <SettingsRow>
+          <span>Reading Format</span>
+          <span className="ml-auto text-app">Hiragana</span>
+        </SettingsRow>
+      </SettingsGroup>
+
+      <SettingsGroup title="Audio">
+        <SettingsRow>
+          <span>Auto-Play in Flashcards</span>
+          <span className="ml-auto text-app">Off</span>
+        </SettingsRow>
+        <SettingsRow>
+          <span>Cached Audio</span>
+          <span className="ml-auto text-ink-400">12 MB</span>
+        </SettingsRow>
+      </SettingsGroup>
+
+      <SettingsGroup title="Notifications">
+        <SettingsRow>
+          <span>Study Reminders</span>
+          <span className="ml-auto flex h-[1.8em] w-[3em] items-center justify-end rounded-full bg-app p-[0.12em]">
+            <span className="h-full w-[1.56em] rounded-full bg-white shadow-sm" />
+          </span>
+        </SettingsRow>
+      </SettingsGroup>
+
+      <SettingsGroup title="Data">
+        <SettingsRow>
+          <svg viewBox="0 0 24 24" className="h-[1.3em] w-[1.3em] shrink-0 text-red-600" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4.5 12a7.5 7.5 0 102.4-5.5M4.4 3.2v3.9h3.9" />
+          </svg>
+          <span className="text-red-600">Reset Dictionary Database</span>
+        </SettingsRow>
+      </SettingsGroup>
+    </div>
+  )
+}
+
+function SettingsGroup({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="mt-[1.25em]">
+      <p className="mb-[0.45em] px-[0.95em] text-[0.9em] font-semibold text-ink-500">{title}</p>
+      <div className="divide-y divide-ink-100 rounded-[1.5em] bg-white px-[0.95em]">{children}</div>
+    </div>
+  )
+}
+
+function SettingsRow({ children }: { children: React.ReactNode }) {
+  return <div className="flex min-h-[3em] items-center gap-[0.7em] whitespace-nowrap leading-none">{children}</div>
 }
 
 /** The landing page's black pill label. */

@@ -53,6 +53,7 @@ This is a Next.js 15 site for the JisokuDict iOS app. It serves as a landing pag
 - The data is a 700-word sample of the app's real dictionary, built by `scripts/build-demo-data.mjs` from the app's `jmdict.db` and `brushvg.json` (usage is in the script's header). It writes `public/demo/words.json` (fetched when the page loads), `public/demo/kanji/<hex>.json` (fetched per kanji) and `src/content/demo-featured.json` (the words the page itself shows, inlined). Rebuild it when the app's dictionary data is refreshed; `--sentences` also refetches example sentences from `api.jisoku.app`. Don't put generated files in a folder named `data/`: `.gitignore` ignores it for the SQLite file.
 - Audio uses the browser's Japanese voice (`speechSynthesis`). `scripts/fetch-demo-audio.mjs` downloads the app's own clips for the featured words into `public/demo/audio/` and lists them in `src/content/demo-audio.json`; words listed there play the clip instead.
 - The screenshots in `public/shots/<lang>/` are the app's Indigo-theme captures (`JisokuScreenshot/` in the app repo), and `public/og/<lang>.png` are the App Store header images padded to 1200×630. Screenshots must never show ads. The Live Scan capture shows a page of *Give My Regards to Black Jack*; keep Shuho Sato's credit under it.
+- `/support` (both locales) uses the same frame around English captures in `public/shots/en/`, made the same way (660×1435 WebP from `JisokuScreenshot/iPhone English (Indigo)/`). Its Purchases topic has no capture: `SettingsScreen` in `SupportView.tsx` draws the app's Settings with Remove Ads bought, so keep its labels in step with the app.
 - The footer's data credits (JMdict, KANJIDIC2, KanjiVG, animCJK, Kanjium, Tatoeba) are a license requirement, since the page shows that data.
 
 ### Search engines
@@ -136,10 +137,10 @@ public/
 ├── app-ads.txt                       # AdMob verification
 ├── app-icon.png
 ├── demo/                             # generated dictionary sample for the landing demo
-├── shots/{en,ja}/                    # app screenshots on the landing page
+├── shots/{en,ja}/                    # app screenshots: the landing page's, and in en/ the support page's
+│                                     # (word, kanji, search, study, favorites)
 ├── og/{en,ja}.png                    # social preview images
-└── screenshots/                      # iPhone Duo simulator shots: *.webp (unfolded portrait, /support);
-                                      # duo-*.webp were the old landing page's and are unused
+└── screenshots/                      # old pink-theme iPhone Duo shots, no longer used by any page
 ```
 
 ### Design
