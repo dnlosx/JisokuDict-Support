@@ -88,7 +88,7 @@ const TOPICS: Record<Locale, Topic[]> = {
           q: 'Search results look wrong or are missing',
           a: (
             <>
-              Open Settings, scroll to Dictionary Data and tap <Kbd>Reset Dictionary Database</Kbd>. It
+              Open Settings, scroll to Data and tap <Kbd>Reset Dictionary Database</Kbd>. It
               re-extracts the dictionary from the app. It takes about a minute, and your favorites and
               flashcards are stored separately so they aren&apos;t affected. If that doesn&apos;t fix it, <a href="#contact" className="link">let us know</a>.
             </>
@@ -251,7 +251,7 @@ const TOPICS: Record<Locale, Topic[]> = {
           q: 'Los resultados de búsqueda están mal o faltan',
           a: (
             <>
-              Abre Settings, baja hasta Dictionary Data y toca <Kbd>Reset Dictionary Database</Kbd>. Esto
+              Abre Settings, baja hasta Data y toca <Kbd>Reset Dictionary Database</Kbd>. Esto
               vuelve a extraer el diccionario de la app. Tarda alrededor de un minuto, y tus favoritos y
               tarjetas se guardan por separado, así que no se ven afectados. Si no se arregla,{' '}
               <a href="#contact" className="link">avísanos</a>.

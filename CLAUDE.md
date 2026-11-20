@@ -139,8 +139,7 @@ public/
 ├── demo/                             # generated dictionary sample for the landing demo
 ├── shots/{en,ja}/                    # app screenshots: the landing page's, and in en/ the support page's
 │                                     # (word, kanji, search, study, favorites)
-├── og/{en,ja}.png                    # social preview images
-└── screenshots/                      # old pink-theme iPhone Duo shots, no longer used by any page
+└── og/{en,ja}.png                    # social preview images
 ```
 
 ### Design
