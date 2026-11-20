@@ -4,6 +4,15 @@
 
 html {
   scroll-behavior: smooth;
+  /* Keeps anchored sections clear of the sticky header. */
+  scroll-padding-top: 5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
@@ -11,11 +20,43 @@ body {
 }
 
 .font-japanese {
-  font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif;
+  font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', 'Meiryo', sans-serif;
+}
+
+/* Japanese headlines break between phrases, not mid-word, where supported. */
+:lang(ja) :is(h1, h2, h3) {
+  word-break: auto-phrase;
+}
+
+/* Stroke-order playback: the pen travels along a path of length 1. */
+.stroke-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: stroke-draw 0.5s ease-in-out 0.1s forwards;
+}
+
+@keyframes stroke-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stroke-draw {
+    animation-duration: 1ms;
+    animation-delay: 0s;
+  }
+}
+
+/* The demo's search field draws its own clear button. */
+.demo-search::-webkit-search-cancel-button,
+.demo-search::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 @layer components {
   .link {
-    @apply text-sakura-600 underline decoration-sakura-200 underline-offset-2 transition hover:text-sakura-700 hover:decoration-sakura-400;
+    @apply font-medium text-app underline decoration-ai-200 underline-offset-2 transition hover:decoration-ai-400;
   }
 }

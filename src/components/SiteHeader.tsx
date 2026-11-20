@@ -1,59 +1,84 @@
 import Link from 'next/link'
 
-import { localePath, type Locale, type TranslatedPath } from '@/lib/i18n'
+import { localePath, type TranslatedPath } from '@/lib/i18n'
+import { APP_STORE_URLS, type SiteLocale } from '@/lib/site'
 
-export const APP_STORE_URL = 'https://apps.apple.com/us/app/jisokudict/id6757970596'
-const APP_STORE_URL_MX = 'https://apps.apple.com/mx/app/jisokudict/id6757970596'
+export const APP_STORE_URL = APP_STORE_URLS.en
 
 const LABELS = {
-  en: { support: 'Support', privacy: 'Privacy', download: 'Download', switchTo: 'Español', switchLang: 'es' },
-  es: { support: 'Soporte', privacy: 'Privacidad', download: 'Descargar', switchTo: 'English', switchLang: 'en' },
+  en: { home: '/', features: 'Features', support: 'Support', privacy: 'Privacy', download: 'Get the app' },
+  ja: { home: '/ja', features: '機能', support: 'サポート', privacy: 'プライバシー', download: 'アプリを入手' },
+  es: { home: '/', features: '', support: 'Soporte', privacy: 'Privacidad', download: 'Descargar' },
 } as const
 
 type Props = {
   active?: 'support' | 'privacy'
-  locale?: Locale
-  /** The current page's path when it also exists in the other language; shows a language switch. */
+  locale?: SiteLocale
+  /** The current page's path when it also exists in Spanish; shows a language switch. */
   translatedPath?: TranslatedPath
+  /** On the landing pages: link to the page's own sections and to its other language. */
+  landing?: boolean
 }
 
-export function SiteHeader({ active, locale = 'en', translatedPath }: Props) {
+export function SiteHeader({ active, locale = 'en', translatedPath, landing = false }: Props) {
   const t = LABELS[locale]
+  // Support and privacy exist in English and Spanish; Japanese visitors get the English pages.
   const prefix = locale === 'es' ? '/es' : ''
   const linkClass = (name: Props['active']) =>
-    active === name
-      ? 'text-ink-900 font-medium'
-      : 'text-ink-500 hover:text-ink-900 transition'
+    active === name ? 'text-ink-900 font-medium' : 'text-ink-600 hover:text-ink-900 transition'
 
   return (
-    <header className="sticky top-0 z-30 border-b border-ink-100/80 bg-white/80 backdrop-blur-md">
-      <nav className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
-        <Link href="/" className="flex items-center gap-2.5 text-ink-900 font-semibold tracking-tight">
+    <header className="sticky top-0 z-30 border-b border-ink-900/5 bg-white/80 backdrop-blur-md">
+      <nav aria-label="Main" className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 sm:h-16">
+        <Link href={t.home} className="flex shrink-0 items-center gap-2.5 font-bold tracking-tight text-ink-900">
           <img src="/app-icon.png" alt="" width={32} height={32} className="rounded-[9px] shadow-sm" />
-          JisokuDict
+          Jisoku
         </Link>
-        <div className="flex items-center gap-5 sm:gap-7 text-sm">
-          <Link href={`${prefix}/support`} className={linkClass('support')} aria-current={active === 'support' ? 'page' : undefined}>
+        <div className="flex items-center gap-4 text-sm sm:gap-7">
+          {landing && (
+            <a href="#features" className="hidden text-ink-600 transition hover:text-ink-900 sm:inline">
+              {t.features}
+            </a>
+          )}
+          <Link
+            href={`${prefix}/support`}
+            className={`${linkClass('support')} ${landing ? 'hidden sm:inline' : ''}`}
+            aria-current={active === 'support' ? 'page' : undefined}
+          >
             {t.support}
           </Link>
-          <Link href={`${prefix}/privacy`} className={linkClass('privacy')} aria-current={active === 'privacy' ? 'page' : undefined}>
+          <Link
+            href={`${prefix}/privacy`}
+            className={`${linkClass('privacy')} ${landing ? 'hidden sm:inline' : ''}`}
+            aria-current={active === 'privacy' ? 'page' : undefined}
+          >
             {t.privacy}
           </Link>
-          {translatedPath && (
+          {translatedPath && locale !== 'ja' && (
             <Link
-              href={localePath(t.switchLang, translatedPath)}
-              hrefLang={t.switchLang}
-              lang={t.switchLang}
-              className="text-ink-500 hover:text-ink-900 transition"
+              href={localePath(locale === 'es' ? 'en' : 'es', translatedPath)}
+              hrefLang={locale === 'es' ? 'en' : 'es'}
+              lang={locale === 'es' ? 'en' : 'es'}
+              className="text-ink-600 transition hover:text-ink-900"
             >
-              {t.switchTo}
+              {locale === 'es' ? 'English' : 'Español'}
+            </Link>
+          )}
+          {landing && (
+            <Link
+              href={locale === 'ja' ? '/' : '/ja'}
+              hrefLang={locale === 'ja' ? 'en' : 'ja'}
+              lang={locale === 'ja' ? 'en' : 'ja'}
+              className="text-ink-600 transition hover:text-ink-900"
+            >
+              {locale === 'ja' ? 'English' : '日本語'}
             </Link>
           )}
           <a
-            href={locale === 'es' ? APP_STORE_URL_MX : APP_STORE_URL}
+            href={APP_STORE_URLS[locale]}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:inline-flex bg-ink-900 text-white px-4 py-2 rounded-full hover:bg-ink-700 transition"
+            className={`rounded-full bg-ink-900 px-4 py-2 font-semibold text-white transition hover:bg-ink-700 ${landing ? '' : 'hidden sm:inline-flex'}`}
           >
             {t.download}
           </a>

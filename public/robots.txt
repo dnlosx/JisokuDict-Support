@@ -13,6 +13,16 @@ User-agent: anthropic-ai
 User-agent: GPTBot
 User-agent: OAI-SearchBot
 User-agent: ChatGPT-User
+User-agent: Google-InspectionTool
+User-agent: facebookexternalhit
+User-agent: Facebot
+User-agent: Twitterbot
+User-agent: Slackbot
+User-agent: Slackbot-LinkExpanding
+User-agent: Slack-ImgProxy
+User-agent: Discordbot
+User-agent: LinkedInBot
+User-agent: TelegramBot
 Allow: /
 Disallow: /admin
 Disallow: /api/
@@ -22,3 +32,5 @@ Disallow: /support/restore
 User-agent: *
 Allow: /app-ads.txt$
 Disallow: /
+
+Sitemap: https://jisoku.app/sitemap.xml

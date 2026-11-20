@@ -348,14 +348,14 @@ const TOPICS: Record<Locale, Topic[]> = {
 const STRINGS = {
   en: {
     eyebrow: 'Support',
-    title: 'How can we help?',
+    title: ['How can', 'we help?'],
     lead: 'Quick answers about purchases, sync, studying and search, plus a direct line to the developer when you need one.',
     uiNote: null,
     browse: 'Browse answers',
     sendMessage: 'Send a message',
     topicsLabel: 'Help topics',
     contact: 'Contact',
-    contactTitle: 'Still stuck? Write to us.',
+    contactTitle: ['Still stuck?', 'Write to us.'],
     contactLead:
       'JisokuDict is made by one developer, who reads every message. Bug reports, ideas for new features and corrections to dictionary entries are all welcome.',
     tipsTitle: 'For bugs, it helps to include',
@@ -371,7 +371,7 @@ const STRINGS = {
   },
   es: {
     eyebrow: 'Soporte',
-    title: '¿Cómo podemos ayudarte?',
+    title: ['¿Cómo podemos', 'ayudarte?'],
     lead: 'Respuestas rápidas sobre compras, sincronización, estudio y búsqueda, y una línea directa con el desarrollador cuando la necesites.',
     uiNote:
       'La app está en inglés y japonés, así que los nombres de botones y menús aparecen aquí tal como los verás en inglés.',
@@ -379,7 +379,7 @@ const STRINGS = {
     sendMessage: 'Enviar un mensaje',
     topicsLabel: 'Temas de ayuda',
     contact: 'Contacto',
-    contactTitle: '¿Sigues con dudas? Escríbenos.',
+    contactTitle: ['¿Sigues con dudas?', 'Escríbenos.'],
     contactLead:
       'JisokuDict lo hace un solo desarrollador, que lee todos los mensajes. Puedes escribir en español. Los reportes de errores, las ideas para nuevas funciones y las correcciones al diccionario son bienvenidos.',
     tipsTitle: 'Si es un error, ayuda incluir',
@@ -399,29 +399,24 @@ export function SupportView({ locale }: { locale: Locale }) {
   const t = STRINGS[locale]
   const topics = TOPICS[locale]
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="flex min-h-screen flex-col bg-white">
       <SiteHeader active="support" locale={locale} translatedPath="/support" />
 
-      <main className="flex-1">
+      <main className="flex-1 overflow-x-clip">
         <Hero t={t} firstTopic={topics[0].id} />
 
-        <nav aria-label={t.topicsLabel} className="max-w-6xl mx-auto px-4 -mt-6 relative z-10">
-          <ul className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <nav aria-label={t.topicsLabel} className="relative z-10 mx-auto -mt-8 max-w-6xl px-4">
+          <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4">
             {topics.map((topic) => (
               <li key={topic.id}>
                 <a
                   href={`#${topic.id}`}
-                  className="group flex h-full items-start gap-3 rounded-2xl border border-ink-100 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-sakura-200 hover:shadow-md"
+                  className="flex h-full flex-col gap-3 rounded-2xl border border-ink-100 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-app hover:shadow-md sm:flex-row sm:items-start"
                 >
-                  <span
-                    aria-hidden
-                    className="font-mincho text-2xl leading-none text-sakura-500 transition group-hover:text-sakura-600"
-                  >
-                    {topic.kanji}
-                  </span>
-                  <span>
-                    <span className="block font-medium text-ink-900">{topic.title}</span>
-                    <span className="mt-0.5 block text-xs text-ink-500 leading-snug">{topic.blurb}</span>
+                  <KanjiTile>{topic.kanji}</KanjiTile>
+                  <span className="min-w-0">
+                    <span className="block font-bold leading-snug text-ink-900">{topic.title}</span>
+                    <span className="mt-1 block text-xs leading-snug text-ink-600">{topic.blurb}</span>
                   </span>
                 </a>
               </li>
@@ -429,27 +424,29 @@ export function SupportView({ locale }: { locale: Locale }) {
           </ul>
         </nav>
 
-        <div className="max-w-6xl mx-auto px-4 py-20 sm:py-24 space-y-20 sm:space-y-28">
+        <div className="mx-auto max-w-6xl space-y-20 px-4 py-16 sm:space-y-28 sm:py-24">
           {topics.map((topic, i) => (
             <TopicSection key={topic.id} topic={topic} flip={i % 2 === 1} />
           ))}
         </div>
 
-        <section id="contact" className="scroll-mt-20 bg-ink-50/70 border-t border-ink-100">
-          <div className="max-w-6xl mx-auto px-4 py-20 sm:py-24 grid lg:grid-cols-[1fr_1.35fr] gap-12 lg:gap-16">
+        <section id="contact" className="scroll-mt-16 border-t border-ink-100 bg-app-bg">
+          <div className="mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:py-24 lg:grid-cols-[1fr_1.35fr] lg:gap-16">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sakura-600">{t.contact}</p>
-              <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-ink-900">{t.contactTitle}</h2>
-              <p className="mt-4 text-ink-600 leading-relaxed">{t.contactLead}</p>
-              <div className="mt-8 rounded-2xl border border-ink-100 bg-white p-5">
-                <p className="text-sm font-medium text-ink-900">{t.tipsTitle}</p>
-                <ul className="mt-3 space-y-2 text-sm text-ink-600">
+              <Eyebrow>{t.contact}</Eyebrow>
+              <h2 className="mt-5 text-3xl font-black leading-[1.1] tracking-tight text-ink-900 sm:text-[2.75rem]">
+                {t.contactTitle[0]} <span className="block text-app">{t.contactTitle[1]}</span>
+              </h2>
+              <p className="mt-5 text-lg leading-relaxed text-ink-700">{t.contactLead}</p>
+              <div className="mt-8 rounded-2xl bg-white p-5 shadow-sm">
+                <p className="font-bold text-ink-900">{t.tipsTitle}</p>
+                <ul className="mt-3 space-y-2.5 text-sm leading-relaxed text-ink-700">
                   {t.tips.map((tip) => (
                     <Tip key={tip}>{tip}</Tip>
                   ))}
                 </ul>
               </div>
-              <p className="mt-6 text-xs text-ink-500 leading-relaxed">
+              <p className="mt-6 text-sm leading-relaxed text-ink-600">
                 {t.privacyNote(
                   <a href={localePath(locale, '/privacy')} className="link">
                     {t.privacyLink}
@@ -458,7 +455,7 @@ export function SupportView({ locale }: { locale: Locale }) {
               </p>
             </div>
 
-            <div className="rounded-3xl border border-ink-100 bg-white p-6 sm:p-8 shadow-sm">
+            <div className="rounded-3xl bg-white p-6 shadow-sm sm:p-8">
               <ContactForm locale={locale} />
             </div>
           </div>
@@ -472,35 +469,42 @@ export function SupportView({ locale }: { locale: Locale }) {
 
 function Hero({ t, firstTopic }: { t: (typeof STRINGS)[Locale]; firstTopic: string }) {
   return (
-    <section className="relative overflow-hidden border-b border-ink-100 bg-gradient-to-b from-sakura-50/70 via-white to-ai-50/40">
+    <section className="relative overflow-hidden bg-gradient-to-b from-[#f7f8fd] to-[#e4e8f7]">
       <span
         aria-hidden
-        className="pointer-events-none absolute -left-10 -top-16 select-none font-mincho text-[18rem] leading-none text-sakura-100/70 sm:text-[24rem]"
+        lang="ja"
+        className="pointer-events-none absolute -left-10 -top-16 select-none font-mincho text-[18rem] leading-none text-app/[0.06] sm:text-[24rem]"
       >
         助
       </span>
 
-      <div className="relative max-w-6xl mx-auto px-4 pt-14 pb-20 sm:pt-20 sm:pb-24 grid lg:grid-cols-[1.1fr_1fr] gap-12 items-center">
+      <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 pb-20 pt-10 sm:pb-24 sm:pt-16 lg:grid-cols-[1.1fr_1fr]">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sakura-600">
-            <span className="font-japanese tracking-normal" lang="ja">サポート</span> · {t.eyebrow}
-          </p>
-          <h1 className="mt-4 text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-ink-900">{t.title}</h1>
-          <p className="mt-5 max-w-xl text-lg text-ink-600 leading-relaxed">{t.lead}</p>
-          {t.uiNote && <p className="mt-3 max-w-xl text-sm text-ink-500 leading-relaxed">{t.uiNote}</p>}
+          <Eyebrow>
+            <span className="font-japanese tracking-normal" lang="ja">サポート</span>
+            <span aria-hidden>·</span>
+            <span>{t.eyebrow}</span>
+          </Eyebrow>
+          <h1 className="mt-5 text-[2.6rem] font-black leading-[1.04] tracking-tight text-ink-900 sm:text-6xl">
+            {t.title[0]} <span className="block text-app">{t.title[1]}</span>
+          </h1>
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-700">{t.lead}</p>
+          {t.uiNote && <p className="mt-3 max-w-xl text-sm leading-relaxed text-ink-600">{t.uiNote}</p>}
           <div className="mt-8 flex flex-wrap gap-3">
             <a
               href={`#${firstTopic}`}
-              className="inline-flex items-center gap-2 rounded-full bg-ink-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-ink-700"
+              className="inline-flex items-center rounded-2xl bg-ink-900 px-6 py-3.5 font-semibold text-white shadow-lg transition hover:bg-ink-700 active:scale-[0.98]"
             >
               {t.browse}
             </a>
             <a
               href="#contact"
-              className="inline-flex items-center gap-2 rounded-full border border-ink-200 bg-white px-5 py-3 text-sm font-medium text-ink-800 transition hover:border-sakura-300 hover:text-sakura-700"
+              className="inline-flex items-center gap-1.5 rounded-2xl border border-ink-900/15 bg-white/70 px-5 py-3.5 font-semibold text-ink-900 transition hover:border-app hover:text-app"
             >
               {t.sendMessage}
-              <span aria-hidden>→</span>
+              <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M3 8h10m-4-4l4 4-4 4" />
+              </svg>
             </a>
           </div>
         </div>
@@ -508,11 +512,11 @@ function Hero({ t, firstTopic }: { t: (typeof STRINGS)[Locale]; firstTopic: stri
         <div className="relative mx-auto h-[360px] w-full max-w-[440px] sm:h-[440px]" aria-hidden>
           <Screenshot
             src="/screenshots/word.webp"
-            className="absolute left-0 top-6 w-[62%] -rotate-[5deg] opacity-95"
+            className="absolute left-0 top-6 w-[62%] -rotate-[5deg] opacity-95 shadow-ai-900/15"
           />
           <Screenshot
             src="/screenshots/kanji.webp"
-            className="absolute right-0 top-0 w-[66%] rotate-[3deg] shadow-2xl shadow-ai-500/20"
+            className="absolute right-0 top-0 w-[66%] rotate-[3deg] shadow-2xl shadow-ai-900/30"
           />
         </div>
       </div>
@@ -522,34 +526,29 @@ function Hero({ t, firstTopic }: { t: (typeof STRINGS)[Locale]; firstTopic: stri
 
 function TopicSection({ topic, flip }: { topic: Topic; flip: boolean }) {
   return (
-    <section id={topic.id} className="scroll-mt-24 grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+    <section id={topic.id} className="grid scroll-mt-24 items-start gap-10 lg:grid-cols-2 lg:gap-16">
       <div className={flip ? 'lg:order-2' : undefined}>
-        <div className="flex items-center gap-3">
-          <span aria-hidden className="font-mincho text-4xl leading-none text-sakura-500">
-            {topic.kanji}
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink-900">{topic.title}</h2>
+        <div className="flex items-center gap-3.5">
+          <KanjiTile large>{topic.kanji}</KanjiTile>
+          <h2 className="text-3xl font-black leading-[1.1] tracking-tight text-ink-900 sm:text-4xl">{topic.title}</h2>
         </div>
-        <div className="mt-6 divide-y divide-ink-100 border-y border-ink-100">
+        <div className="mt-7 divide-y divide-ink-100 border-y border-ink-100">
           {topic.faqs.map((f) => (
-            <details key={f.q} className="group py-1">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left font-medium text-ink-900 transition hover:text-sakura-700 [&::-webkit-details-marker]:hidden">
+            <details key={f.q} className="group">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-[17px] font-semibold text-ink-900 transition hover:text-app [&::-webkit-details-marker]:hidden">
                 {f.q}
-                <span
-                  aria-hidden
-                  className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-ink-200 text-ink-500 transition group-open:rotate-45 group-open:border-sakura-300 group-open:text-sakura-600"
-                >
-                  +
-                </span>
+                <svg viewBox="0 0 20 20" className="h-5 w-5 shrink-0 text-ink-400 transition group-open:rotate-45 group-open:text-app" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" aria-hidden>
+                  <path d="M10 4v12M4 10h12" />
+                </svg>
               </summary>
-              <p className="pb-5 pr-10 text-ink-600 leading-relaxed">{f.a}</p>
+              <p className="pb-5 pr-8 leading-relaxed text-ink-700">{f.a}</p>
             </details>
           ))}
         </div>
       </div>
 
       <div className={`lg:sticky lg:top-24 ${flip ? 'lg:order-1' : ''}`}>
-        <div className="rounded-[2rem] bg-gradient-to-br from-ai-50 via-white to-sakura-50 p-6 sm:p-10 border border-ink-100">
+        <div className="rounded-3xl border border-ink-100 bg-app-bg p-6 sm:p-10">
           {topic.shot.crop ? (
             <img
               src={topic.shot.src}
@@ -557,14 +556,37 @@ function TopicSection({ topic, flip }: { topic: Topic; flip: boolean }) {
               width={985}
               height={560}
               loading="lazy"
-              className="w-full rounded-2xl border border-ink-100 bg-white shadow-xl shadow-ai-500/10"
+              className="w-full rounded-2xl border border-ink-100 bg-white shadow-xl shadow-ai-900/15"
             />
           ) : (
-            <Screenshot src={topic.shot.src} alt={topic.shot.alt} className="mx-auto w-full max-w-[300px]" />
+            <Screenshot src={topic.shot.src} alt={topic.shot.alt} className="mx-auto w-full max-w-[300px] shadow-ai-900/15" />
           )}
         </div>
       </div>
     </section>
+  )
+}
+
+/** The landing page's black pill label. */
+function Eyebrow({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="inline-flex items-center gap-1.5 rounded-full bg-ink-900 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white">
+      {children}
+    </p>
+  )
+}
+
+function KanjiTile({ children, large = false }: { children: React.ReactNode; large?: boolean }) {
+  return (
+    <span
+      aria-hidden
+      lang="ja"
+      className={`flex shrink-0 items-center justify-center bg-app-soft font-japanese text-app ${
+        large ? 'h-12 w-12 rounded-2xl text-2xl' : 'h-10 w-10 rounded-xl text-lg'
+      }`}
+    >
+      {children}
+    </span>
   )
 }
 
@@ -579,8 +601,10 @@ function Kbd({ children }: { children: React.ReactNode }) {
 function Tip({ children }: { children: React.ReactNode }) {
   return (
     <li className="flex gap-2.5">
-      <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-sakura-400" />
-      {children}
+      <svg viewBox="0 0 20 20" className="mt-0.5 h-4 w-4 shrink-0 text-app" fill="currentColor" aria-hidden>
+        <path d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 111.4-1.4l3.8 3.8 6.8-6.8a1 1 0 011.4 0z" />
+      </svg>
+      <span>{children}</span>
     </li>
   )
 }

@@ -32,7 +32,7 @@ const TOPIC_LABELS: Record<Feedback['topic'], string> = {
 }
 
 const TOPIC_STYLES: Record<Feedback['topic'], string> = {
-  bug: 'bg-sakura-50 text-sakura-700 ring-sakura-200',
+  bug: 'bg-red-50 text-red-700 ring-red-200',
   feature: 'bg-ai-50 text-ai-700 ring-ai-200',
   purchase: 'bg-amber-50 text-amber-800 ring-amber-200',
   question: 'bg-emerald-50 text-emerald-800 ring-emerald-200',

@@ -51,11 +51,11 @@ export function AdminAuthForm() {
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full px-3 py-2 border border-ink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sakura-300 focus:border-sakura-400"
+          className="w-full px-3 py-2 border border-ink-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-app-soft focus:border-app"
         />
       </div>
       {error && (
-        <p className="text-sm text-sakura-700" role="alert" aria-live="polite">
+        <p className="text-sm text-red-700" role="alert" aria-live="polite">
           {error}
         </p>
       )}

@@ -36,7 +36,7 @@ This is a Next.js 15 site for the JisokuDict iOS app. It serves as a landing pag
 
 | Route | Auth | Purpose |
 |-------|------|---------|
-| `/` | Public | Landing page (features, iPhone Duo folded/unfolded section, App Store CTA) |
+| `/`, `/ja` | Public | Landing page in English and Japanese: live dictionary demo, pitch, stroke order, flashcards, FAQ, App Store CTA |
 | `/support` | Public | FAQ by topic with app screenshots + contact form (`#contact`) |
 | `/admin/auth` | Public | Admin password form |
 | `/admin` | Admin | Inbox of contact-form messages |
@@ -44,9 +44,23 @@ This is a Next.js 15 site for the JisokuDict iOS app. It serves as a landing pag
 | `/es/support`, `/es/privacy` | Public | Spanish (Mexico) translations; `/es` redirects to `/es/support` |
 | `/app-ads.txt` | Public | AdMob verification (served from `public/`) |
 
+### Landing page and live demo
+
+`/` and `/ja` render `src/components/landing/LandingPage.tsx` from one copy file (`landing/copy.ts`, both languages; change them together). The page is static. Its interactive parts are client components in `src/components/demo/`:
+
+- `DictionaryDemo` is a small copy of the app inside a phone frame: search (English, kana, kanji, romaji, conjugated forms), word detail (pitch graph, conjugations, example sentences, audio) and kanji detail (brush stroke order). `PitchCompare`, `StrokePlayer` and `FlashcardDemo` are the other sections' demos. The logic (search ranking, conjugation, romaji, pitch) is in `src/lib/demo/` and has no React in it.
+- The data is a 700-word sample of the app's real dictionary, built by `scripts/build-demo-data.mjs` from the app's `jmdict.db` and `brushvg.json` (usage is in the script's header). It writes `public/demo/words.json` (fetched when the page loads), `public/demo/kanji/<hex>.json` (fetched per kanji) and `src/content/demo-featured.json` (the words the page itself shows, inlined). Rebuild it when the app's dictionary data is refreshed; `--sentences` also refetches example sentences from `api.jisoku.app`. Don't put generated files in a folder named `data/`: `.gitignore` ignores it for the SQLite file.
+- Audio uses the browser's Japanese voice (`speechSynthesis`). `scripts/fetch-demo-audio.mjs` downloads the app's own clips for the featured words into `public/demo/audio/` and lists them in `src/content/demo-audio.json`; words listed there play the clip instead.
+- The screenshots in `public/shots/<lang>/` are the app's Indigo-theme captures (`JisokuScreenshot/` in the app repo), and `public/og/<lang>.png` are the App Store header images padded to 1200×630. Screenshots must never show ads. The Live Scan capture shows a page of *Give My Regards to Black Jack*; keep Shuho Sato's credit under it.
+- The footer's data credits (JMdict, KANJIDIC2, KanjiVG, animCJK, Kanjium, Tatoeba) are a license requirement, since the page shows that data.
+
+### Search engines
+
+Each landing page sets its title, description, canonical, `hreflang` (en, ja, x-default), Open Graph and Twitter tags, and emits schema.org `MobileApplication` and `FAQPage` JSON-LD built from the page's own copy (`StructuredData` in `LandingPage.tsx`). `src/app/sitemap.ts` lists the public pages and `public/robots.txt` points to it. The root layouts add Safari's Smart App Banner (`itunes.appId`). Constants such as the App Store id are in `src/lib/site.ts`.
+
 ### Spanish pages
 
-`src/app/(en)` and `src/app/es` are route groups with their own root layouts, so each sets the right `<html lang>`. Only `/support` and `/privacy` are translated (`TRANSLATED_PATHS` in `src/lib/i18n.ts`); those pages emit hreflang alternates and the header shows a language switch. The app's UI is English/Japanese only, so Spanish FAQ answers keep the English button names. The Spanish privacy policy (`src/app/es/privacy/page.tsx`) is a sentence-by-sentence translation: change both files together. App Store Connect's Spanish (Mexico) listing links to `https://jisoku.app/es/privacy`.
+`src/app/(en)`, `src/app/ja` and `src/app/es` are route groups with their own root layouts, so each sets the right `<html lang>`. Only `/support` and `/privacy` are translated (`TRANSLATED_PATHS` in `src/lib/i18n.ts`); those pages emit hreflang alternates and the header shows a language switch. The app's UI is English/Japanese only, so Spanish FAQ answers keep the English button names. The Spanish privacy policy (`src/app/es/privacy/page.tsx`) is a sentence-by-sentence translation: change both files together. App Store Connect's Spanish (Mexico) listing links to `https://jisoku.app/es/privacy`.
 
 ### API routes
 
@@ -87,6 +101,8 @@ src/
 │   │       ├── auth/{page,AdminAuthForm}.tsx
 │   │       ├── page.tsx              # inbox
 │   │       └── HandledToggle.tsx
+│   ├── ja/{layout,page}.tsx          # Japanese landing (root layout, lang="ja")
+│   ├── sitemap.ts
 │   ├── es/                           # Spanish pages (root layout, lang="es-MX")
 │   │   ├── layout.tsx
 │   │   ├── privacy/page.tsx
@@ -95,7 +111,10 @@ src/
 │       ├── feedback/route.ts
 │       └── admin/{auth,logout,digest}/route.ts, admin/feedback/[id]/route.ts
 ├── components/                       # SiteHeader, SiteFooter, SupportView (FAQ, both locales),
-│                                     # ContactForm, TurnstileWidget, SignOutButton
+│   │                                 # ContactForm, TurnstileWidget, SignOutButton
+│   ├── landing/                      # LandingPage + copy.ts (en, ja)
+│   └── demo/                         # the landing page's interactive demos (client components)
+├── content/                          # generated: demo-featured.json, demo-audio.json
 ├── db/
 │   ├── index.ts                      # client singleton
 │   ├── schema.ts                     # feedback, rate_limits, ip_bans (+ legacy ticket tables)
@@ -107,20 +126,28 @@ src/
     ├── rate-limit.ts                 # SQLite-backed counter
     ├── ip-ban.ts                     # probe-path detection + 30-day IP bans
     ├── same-origin.ts                # CSRF guard + getClientIp
+    ├── demo/                         # demo logic: search, conjugate, kana (romaji, pitch), labels, types
+    ├── site.ts                       # site URL, App Store id and URLs, landing hreflang
     ├── i18n.ts                       # Locale type, translated paths, hreflang alternates
     └── validators.ts                 # zod schemas (feedback, admin-auth, admin-update)
 
 public/
 ├── app-ads.txt                       # AdMob verification
 ├── app-icon.png
-└── screenshots/                      # iPhone Duo simulator shots: *.webp (unfolded portrait, /support),
-                                      # duo-open-*.webp (unfolded landscape) + duo-folded-*.webp (outer screen) on /
+├── demo/                             # generated dictionary sample for the landing demo
+├── shots/{en,ja}/                    # app screenshots on the landing page
+├── og/{en,ja}.png                    # social preview images
+└── screenshots/                      # iPhone Duo simulator shots: *.webp (unfolded portrait, /support);
+                                      # duo-*.webp were the old landing page's and are unused
 ```
 
 ### Design
 
-Uses a subset of the sukoshi.net design system:
-- `sakura` - Pink accent color
+Every page follows the App Store page: heavy black headlines with the second line in the app's Indigo accent (`app`, `#2f4fb6`), black pill labels, and a pale indigo gradient. Inline links use the `.link` class from `globals.css`. Errors are red (`red-*`), not the accent.
+
+Colors in `tailwind.config.ts`:
+- `app` - The app's Indigo theme accent, its tint (`app-soft`) and list background (`app-bg`)
+- `sakura` - Pink; only the 桜 flashcard in the landing demo uses it now
 - `ink` - Gray text colors
 - `ai` (藍) - Indigo accent from the app icon gradient
 - `font-mincho` - Serif stack for decorative kanji

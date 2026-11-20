@@ -31,6 +31,15 @@ const config: Config = {
           500: '#5f74e3',
           600: '#4f5bd5',
           700: '#4248b8',
+          800: '#27409c',
+          900: '#1d2f73',
+        },
+        // The app's Indigo theme: its accent, the tint behind it, and the
+        // grouped-list background.
+        app: {
+          DEFAULT: '#2f4fb6',
+          soft: '#e9edfa',
+          bg: '#f2f2f7',
         },
         ink: {
           50: '#f6f6f7',

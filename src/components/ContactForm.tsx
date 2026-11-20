@@ -93,7 +93,7 @@ const STRINGS = {
 type Strings = (typeof STRINGS)['en']
 
 const inputClass =
-  'w-full rounded-xl border border-ink-200 bg-white px-3.5 py-2.5 text-ink-900 placeholder:text-ink-300 transition focus:border-sakura-400 focus:outline-none focus:ring-4 focus:ring-sakura-100'
+  'w-full rounded-xl border border-ink-200 bg-white px-3.5 py-2.5 text-ink-900 placeholder:text-ink-300 transition focus:border-app focus:outline-none focus:ring-4 focus:ring-app-soft'
 
 export function ContactForm({ locale = 'en' }: { locale?: Locale }) {
   const t: Strings = STRINGS[locale]
@@ -144,13 +144,13 @@ export function ContactForm({ locale = 'en' }: { locale?: Locale }) {
   if (sent) {
     return (
       <div className="py-10 text-center" role="status">
-        <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-sakura-50 text-sakura-600">
+        <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-app-soft text-app">
           <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth={2.2} aria-hidden>
             <path d="M5 12.5l4.2 4.2L19 7" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
-        <h3 className="mt-5 text-xl font-semibold text-ink-900">{t.sentTitle}</h3>
-        <p className="mt-2 text-ink-600 max-w-sm mx-auto">{email ? t.sentWithEmail(email) : t.sentNoEmail}</p>
+        <h3 className="mt-5 text-xl font-black tracking-tight text-ink-900">{t.sentTitle}</h3>
+        <p className="mx-auto mt-2 max-w-sm leading-relaxed text-ink-700">{email ? t.sentWithEmail(email) : t.sentNoEmail}</p>
         <p className="mt-6 font-japanese text-sm text-ink-400" lang="ja">ありがとうございます</p>
       </div>
     )
@@ -159,7 +159,7 @@ export function ContactForm({ locale = 'en' }: { locale?: Locale }) {
   return (
     <form onSubmit={onSubmit} className="space-y-6" aria-busy={submitting}>
       <fieldset>
-        <legend className="mb-2.5 text-sm font-medium text-ink-800">{t.topicLegend}</legend>
+        <legend className="mb-2.5 text-sm font-semibold text-ink-900">{t.topicLegend}</legend>
         <div className="flex flex-wrap gap-2">
           {TOPIC_VALUES.map((value) => (
             <label key={value} className="cursor-pointer">
@@ -171,7 +171,7 @@ export function ContactForm({ locale = 'en' }: { locale?: Locale }) {
                 onChange={() => setTopic(value)}
                 className="peer sr-only"
               />
-              <span className="inline-block rounded-full border border-ink-200 px-3.5 py-1.5 text-sm text-ink-600 transition hover:border-ink-300 peer-checked:border-sakura-500 peer-checked:bg-sakura-500 peer-checked:text-white peer-focus-visible:ring-4 peer-focus-visible:ring-sakura-100">
+              <span className="inline-block rounded-full border border-ink-200 bg-white px-3.5 py-1.5 text-sm font-medium text-ink-800 transition hover:border-app hover:text-app peer-checked:border-app peer-checked:bg-app peer-checked:text-white peer-focus-visible:ring-4 peer-focus-visible:ring-ai-200">
                 {t.topics[value]}
               </span>
             </label>
@@ -180,7 +180,7 @@ export function ContactForm({ locale = 'en' }: { locale?: Locale }) {
       </fieldset>
 
       <div>
-        <label htmlFor="message" className="mb-1.5 block text-sm font-medium text-ink-800">
+        <label htmlFor="message" className="mb-1.5 block text-sm font-semibold text-ink-900">
           {t.message}
         </label>
         <textarea
@@ -201,7 +201,7 @@ export function ContactForm({ locale = 'en' }: { locale?: Locale }) {
 
       <div className="grid sm:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="device" className="mb-1.5 block text-sm font-medium text-ink-800">
+          <label htmlFor="device" className="mb-1.5 block text-sm font-semibold text-ink-900">
             {t.device} <span className="font-normal text-ink-400">{t.optional}</span>
           </label>
           <input
@@ -215,7 +215,7 @@ export function ContactForm({ locale = 'en' }: { locale?: Locale }) {
           />
         </div>
         <div>
-          <label htmlFor="appVersion" className="mb-1.5 block text-sm font-medium text-ink-800">
+          <label htmlFor="appVersion" className="mb-1.5 block text-sm font-semibold text-ink-900">
             {t.appVersion} <span className="font-normal text-ink-400">{t.optional}</span>
           </label>
           <input
@@ -231,7 +231,7 @@ export function ContactForm({ locale = 'en' }: { locale?: Locale }) {
       </div>
 
       <div>
-        <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-ink-800">
+        <label htmlFor="email" className="mb-1.5 block text-sm font-semibold text-ink-900">
           {t.email} <span className="font-normal text-ink-400">{t.emailHint}</span>
         </label>
         <input
@@ -249,7 +249,7 @@ export function ContactForm({ locale = 'en' }: { locale?: Locale }) {
       <TurnstileWidget onToken={onTurnstileToken} onExpire={onTurnstileExpire} language={locale} />
 
       {error && (
-        <p className="rounded-xl bg-sakura-50 px-4 py-3 text-sm text-sakura-800" role="alert">
+        <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">
           {error}
         </p>
       )}
@@ -257,7 +257,7 @@ export function ContactForm({ locale = 'en' }: { locale?: Locale }) {
       <button
         type="submit"
         disabled={submitting || !turnstileToken}
-        className="w-full sm:w-auto rounded-full bg-ink-900 px-7 py-3 text-sm font-medium text-white transition hover:bg-ink-700 disabled:cursor-not-allowed disabled:bg-ink-300"
+        className="w-full rounded-2xl bg-ink-900 px-7 py-3.5 font-semibold text-white shadow-lg transition hover:bg-ink-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-ink-300 disabled:shadow-none disabled:active:scale-100 sm:w-auto"
       >
         {submitting ? t.sending : t.send}
       </button>
