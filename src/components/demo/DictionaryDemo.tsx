@@ -60,8 +60,8 @@ export function DictionaryDemo({ locale, appStoreUrl }: Props) {
     <div className="flex h-full flex-col bg-app-bg text-ink-900" lang={locale}>
       {view.type === 'search' ? (
         <>
-          <div className="flex h-12 shrink-0 items-center justify-center border-b border-black/5 bg-white/70 text-[15px] font-semibold">
-            {t.search}
+          <div className="shrink-0 border-b border-black/5 bg-white/70 pt-[var(--safe-top,0px)]">
+            <div className="flex h-11 items-center justify-center text-[15px] font-semibold">{t.search}</div>
           </div>
           {results.best && (
             <div className="flex shrink-0 gap-2 overflow-x-auto border-b border-black/5 bg-white/70 px-3 py-2 text-[13px]">
@@ -143,16 +143,18 @@ export function DictionaryDemo({ locale, appStoreUrl }: Props) {
         </>
       ) : (
         <>
-          <div className="flex h-12 shrink-0 items-center gap-2 border-b border-black/5 bg-white px-2">
-            <button type="button" onClick={pop} aria-label={t.back} className="flex h-9 w-9 items-center justify-center rounded-full bg-app-bg text-ink-900 active:scale-95">
-              <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                <path d="M12.5 4L6.5 10l6 6" />
-              </svg>
-            </button>
-            <span className="min-w-0 flex-1 truncate text-[15px] font-semibold font-japanese" lang="ja">
-              {view.type === 'kanji' ? view.ch : word ? headword(word) : ''}
-            </span>
-            {word && <SpeakButton size="sm" text={headword(word)} label={t.listen(headword(word))} unavailable={t.noVoice} />}
+          <div className="shrink-0 border-b border-black/5 bg-white pt-[var(--safe-top,0px)]">
+            <div className="flex h-11 items-center gap-2 px-3">
+              <button type="button" onClick={pop} aria-label={t.back} className="flex h-9 w-9 items-center justify-center rounded-full bg-app-bg text-ink-900 active:scale-95">
+                <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="M12.5 4L6.5 10l6 6" />
+                </svg>
+              </button>
+              <span className="min-w-0 flex-1 truncate text-[15px] font-semibold font-japanese" lang="ja">
+                {view.type === 'kanji' ? view.ch : word ? headword(word) : ''}
+              </span>
+              {word && <SpeakButton size="sm" text={headword(word)} label={t.listen(headword(word))} unavailable={t.noVoice} />}
+            </div>
           </div>
           <div ref={scroller} className="min-h-0 flex-1 overflow-y-auto bg-white">
             {view.type === 'word' && word && (
@@ -497,7 +499,7 @@ function TabBar({ t }: { t: DemoStrings }) {
     [t.tabs.favorites, <path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0112 7.6 4.3 4.3 0 0119.5 10c0 5.4-7.5 10-7.5 10z" />],
   ]
   return (
-    <div aria-hidden className="shrink-0 px-3 pb-3">
+    <div aria-hidden className="shrink-0 px-4 pb-[var(--safe-bottom,0.75rem)]">
       <div className="flex justify-between rounded-full bg-white px-2 py-1.5 shadow-[0_2px_14px_rgba(0,0,0,0.10)]">
         {tabs.map(([label, icon], i) => (
           <div key={label} className={`flex w-[19%] flex-col items-center gap-0.5 rounded-full py-1 text-[10px] font-medium ${i === 0 ? 'bg-app-bg text-app' : 'text-ink-900'}`}>

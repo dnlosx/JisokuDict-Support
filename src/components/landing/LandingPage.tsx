@@ -10,6 +10,7 @@ import { SiteHeader } from '@/components/SiteHeader'
 import { APP_STORE_ID, APP_STORE_URLS, SITE_URL } from '@/lib/site'
 
 import { LANDING_COPY, type LandingCopy, type LandingLocale } from './copy'
+import { DeviceFrame } from './DeviceFrame'
 
 const HERO_QUERIES = ['eat', 'taberu', '食べました', 'hashi', '桜']
 
@@ -45,9 +46,9 @@ export function LandingPage({ locale }: { locale: LandingLocale }) {
             </div>
 
             <div id="demo" className="scroll-mt-20">
-              <PhoneFrame label={c.hero.demoLabel}>
+              <DeviceFrame hero statusBar label={c.hero.demoLabel}>
                 <DictionaryDemo locale={locale} appStoreUrl={storeUrl} />
-              </PhoneFrame>
+              </DeviceFrame>
               <p className="mx-auto mt-4 max-w-[390px] text-center text-sm leading-relaxed text-ink-600">{c.hero.demoCaption}</p>
               <div className="mx-auto mt-3 flex max-w-[390px] flex-wrap items-center justify-center gap-2 text-sm">
                 <span className="text-ink-600">{c.hero.tryLabel}</span>
@@ -141,15 +142,9 @@ export function LandingPage({ locale }: { locale: LandingLocale }) {
                 {c.input.shots.map((shot) => (
                   <li key={shot.file} className="w-[72vw] max-w-[300px] shrink-0 snap-center sm:w-auto sm:max-w-none">
                     <figure>
-                      <img
-                        src={`/shots/${locale}/${shot.file}.webp`}
-                        alt={shot.alt}
-                        width={660}
-                        height={1435}
-                        loading="lazy"
-                        decoding="async"
-                        className="mx-auto w-full max-w-[300px] rounded-[2rem] border-[6px] border-ink-900 bg-white shadow-xl shadow-ai-900/15"
-                      />
+                      <DeviceFrame className="max-w-[300px]">
+                        <img src={`/shots/${locale}/${shot.file}.webp`} alt={shot.alt} width={660} height={1435} loading="lazy" decoding="async" />
+                      </DeviceFrame>
                       <figcaption className="mx-auto mt-5 max-w-[300px]">
                         <h3 className="text-lg font-bold text-ink-900">{shot.title}</h3>
                         <p className="mt-1.5 text-sm leading-relaxed text-ink-600">{shot.body}</p>
@@ -287,14 +282,6 @@ function Section({ children, tinted = false, flip = false }: { children: [React.
         <div className={`min-w-0 ${flip ? 'lg:order-1' : ''}`}>{children[1]}</div>
       </div>
     </section>
-  )
-}
-
-function PhoneFrame({ children, label }: { children: React.ReactNode; label: string }) {
-  return (
-    <div role="region" aria-label={label} className="mx-auto w-full max-w-[390px] rounded-[2.9rem] bg-ink-900 p-[10px] shadow-2xl shadow-ai-900/30">
-      <div className="h-[min(40rem,calc(100svh-11rem))] min-h-[30rem] overflow-hidden rounded-[2.3rem] bg-white lg:h-[min(43rem,calc(100svh-7rem))]">{children}</div>
-    </div>
   )
 }
 

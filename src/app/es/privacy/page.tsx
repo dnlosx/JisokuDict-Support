@@ -8,8 +8,8 @@ import { alternates } from '@/lib/i18n'
 // Translation of src/app/(en)/privacy/page.tsx. Keep the two in sync: any change to
 // the English policy needs the same change here (and the same "last updated" date).
 export const metadata: Metadata = {
-  title: 'Política de privacidad - JisokuDict',
-  description: 'Política de privacidad de la app de diccionario de japonés JisokuDict y del servicio de soporte de JisokuDict.',
+  title: 'Política de privacidad - Jisoku',
+  description: 'Política de privacidad de la app de diccionario de japonés Jisoku y del servicio de soporte de Jisoku.',
   alternates: alternates('es', '/privacy'),
 }
 
@@ -34,7 +34,7 @@ export default function PoliticaDePrivacidadPage() {
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-black tracking-tight text-ink-900 sm:text-3xl">Introducción</h2>
             <p className="mb-4 leading-relaxed text-ink-700">
-              JisokuDict (&quot;la App&quot;) es una aplicación de diccionario japonés-inglés. Esta Política de privacidad explica cómo recopilamos, usamos y protegemos tu información cuando usas la App o el servicio de soporte de JisokuDict en jisoku.app/support.
+              Jisoku (&quot;la App&quot;) es una aplicación de diccionario japonés-inglés. Esta Política de privacidad explica cómo recopilamos, usamos y protegemos tu información cuando usas la App o el servicio de soporte de Jisoku en jisoku.app/support.
             </p>
             <p className="leading-relaxed text-ink-700">
               Nos comprometemos a proteger tu privacidad y a ser transparentes sobre nuestras prácticas de datos.

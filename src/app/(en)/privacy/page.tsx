@@ -6,8 +6,8 @@ import { SiteHeader } from '@/components/SiteHeader'
 import { alternates } from '@/lib/i18n'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy - JisokuDict',
-  description: 'Privacy policy for JisokuDict Japanese dictionary app and the JisokuDict Support service.',
+  title: 'Privacy Policy - Jisoku',
+  description: 'Privacy policy for Jisoku Japanese dictionary app and the Jisoku Support service.',
   alternates: alternates('en', '/privacy'),
 }
 
@@ -30,7 +30,7 @@ export default function PrivacyPage() {
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-black tracking-tight text-ink-900 sm:text-3xl">Introduction</h2>
             <p className="mb-4 leading-relaxed text-ink-700">
-              JisokuDict (&quot;the App&quot;) is a Japanese-English dictionary application. This Privacy Policy explains how we collect, use, and protect your information when you use the App or the JisokuDict Support service at jisoku.app/support.
+              Jisoku (&quot;the App&quot;) is a Japanese-English dictionary application. This Privacy Policy explains how we collect, use, and protect your information when you use the App or the Jisoku Support service at jisoku.app/support.
             </p>
             <p className="leading-relaxed text-ink-700">
               We are committed to protecting your privacy and being transparent about our data practices.

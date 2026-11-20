@@ -16,7 +16,7 @@ export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Inbox - JisokuDict Support',
+  title: 'Inbox - Jisoku Support',
   robots: { index: false, follow: false },
 }
 
@@ -125,7 +125,7 @@ export default async function AdminPage({ searchParams }: Props) {
                         <div className="flex gap-1.5">
                           <dt>Email</dt>
                           <dd>
-                            <a href={`mailto:${f.email}?subject=${encodeURIComponent('Re: your JisokuDict message')}`} className="link">
+                            <a href={`mailto:${f.email}?subject=${encodeURIComponent('Re: your Jisoku message')}`} className="link">
                               {f.email}
                             </a>
                           </dd>

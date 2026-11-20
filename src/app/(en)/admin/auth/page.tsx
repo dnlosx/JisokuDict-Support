@@ -11,7 +11,7 @@ export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Admin sign-in - JisokuDict Support',
+  title: 'Admin sign-in - Jisoku Support',
   robots: { index: false, follow: false },
 }
 

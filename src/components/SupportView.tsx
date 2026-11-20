@@ -22,7 +22,7 @@ const TOPICS: Record<Locale, Topic[]> = {
       kanji: '買',
       title: 'Purchases & ads',
       blurb: 'Removing ads, restoring a purchase, and refunds.',
-      shot: { src: '/screenshots/settings.webp', alt: 'JisokuDict Settings showing Ads Removed and Restore Purchases' },
+      shot: { src: '/screenshots/settings.webp', alt: 'Jisoku Settings showing Ads Removed and Restore Purchases' },
       faqs: [
         {
           q: 'How do I remove ads?',
@@ -62,7 +62,7 @@ const TOPICS: Record<Locale, Topic[]> = {
       kanji: '雲',
       title: 'Sync & your data',
       blurb: 'iCloud, offline use, and fixing search problems.',
-      shot: { src: '/screenshots/today.webp', alt: 'JisokuDict Today screen with Word of the Day and cards due', crop: true },
+      shot: { src: '/screenshots/today.webp', alt: 'Jisoku Today screen with Word of the Day and cards due', crop: true },
       faqs: [
         {
           q: 'Is my data backed up?',
@@ -100,7 +100,7 @@ const TOPICS: Record<Locale, Topic[]> = {
       kanji: '習',
       title: 'Study & streaks',
       blurb: 'Flashcards, daily reminders and the stamp book.',
-      shot: { src: '/screenshots/stamps.webp', alt: 'JisokuDict Stamp Book with streak stamps earned' },
+      shot: { src: '/screenshots/stamps.webp', alt: 'Jisoku Stamp Book with streak stamps earned' },
       faqs: [
         {
           q: 'How do I add words to study?',
@@ -116,7 +116,7 @@ const TOPICS: Record<Locale, Topic[]> = {
           a: (
             <>
               In Settings, under Notifications, turn on <Kbd>Study Reminders</Kbd> and pick a time. If
-              JisokuDict says notifications are disabled, allow them in the iOS Settings app first.
+              Jisoku says notifications are disabled, allow them in the iOS Settings app first.
             </>
           ),
         },
@@ -136,13 +136,13 @@ const TOPICS: Record<Locale, Topic[]> = {
       kanji: '探',
       title: 'Search & dictionary',
       blurb: 'Romaji, camera search, kanji lookup and widgets.',
-      shot: { src: '/screenshots/kanji.webp', alt: 'JisokuDict kanji page for 桜 with stroke order and readings' },
+      shot: { src: '/screenshots/kanji.webp', alt: 'Jisoku kanji page for 桜 with stroke order and readings' },
       faqs: [
         {
           q: 'Do I need a Japanese keyboard?',
           a: (
             <>
-              No. Search in English, kana or romaji: typing <Kbd>taberu</Kbd> finds 食べる. JisokuDict works
+              No. Search in English, kana or romaji: typing <Kbd>taberu</Kbd> finds 食べる. Jisoku works
               out which one you meant.
             </>
           ),
@@ -183,7 +183,7 @@ const TOPICS: Record<Locale, Topic[]> = {
       kanji: '買',
       title: 'Compras y anuncios',
       blurb: 'Quitar anuncios, restaurar una compra y reembolsos.',
-      shot: { src: '/screenshots/settings.webp', alt: 'Settings de JisokuDict con Ads Removed y Restore Purchases' },
+      shot: { src: '/screenshots/settings.webp', alt: 'Settings de Jisoku con Ads Removed y Restore Purchases' },
       faqs: [
         {
           q: '¿Cómo quito los anuncios?',
@@ -224,7 +224,7 @@ const TOPICS: Record<Locale, Topic[]> = {
       kanji: '雲',
       title: 'Sincronización y tus datos',
       blurb: 'iCloud, uso sin conexión y problemas con la búsqueda.',
-      shot: { src: '/screenshots/today.webp', alt: 'Pantalla Today de JisokuDict con la palabra del día y tarjetas pendientes', crop: true },
+      shot: { src: '/screenshots/today.webp', alt: 'Pantalla Today de Jisoku con la palabra del día y tarjetas pendientes', crop: true },
       faqs: [
         {
           q: '¿Mis datos tienen respaldo?',
@@ -264,7 +264,7 @@ const TOPICS: Record<Locale, Topic[]> = {
       kanji: '習',
       title: 'Estudio y rachas',
       blurb: 'Tarjetas, recordatorios diarios y el libro de sellos.',
-      shot: { src: '/screenshots/stamps.webp', alt: 'Stamp Book de JisokuDict con sellos de racha obtenidos' },
+      shot: { src: '/screenshots/stamps.webp', alt: 'Stamp Book de Jisoku con sellos de racha obtenidos' },
       faqs: [
         {
           q: '¿Cómo agrego palabras para estudiar?',
@@ -280,7 +280,7 @@ const TOPICS: Record<Locale, Topic[]> = {
           a: (
             <>
               En Settings, en la sección Notifications, activa <Kbd>Study Reminders</Kbd> y elige una hora.
-              Si JisokuDict indica que las notificaciones están desactivadas, primero permítelas en la app
+              Si Jisoku indica que las notificaciones están desactivadas, primero permítelas en la app
               Configuración de iOS.
             </>
           ),
@@ -302,14 +302,14 @@ const TOPICS: Record<Locale, Topic[]> = {
       kanji: '探',
       title: 'Búsqueda y diccionario',
       blurb: 'Romaji, búsqueda con la cámara, kanji y widgets.',
-      shot: { src: '/screenshots/kanji.webp', alt: 'Página del kanji 桜 en JisokuDict con orden de trazos y lecturas' },
+      shot: { src: '/screenshots/kanji.webp', alt: 'Página del kanji 桜 en Jisoku con orden de trazos y lecturas' },
       faqs: [
         {
           q: '¿Necesito un teclado japonés?',
           a: (
             <>
               No. Puedes buscar en inglés, kana o romaji: al escribir <Kbd>taberu</Kbd> encuentras 食べる.
-              JisokuDict detecta cuál usaste. Las definiciones están en inglés.
+              Jisoku detecta cuál usaste. Las definiciones están en inglés.
             </>
           ),
         },
@@ -357,7 +357,7 @@ const STRINGS = {
     contact: 'Contact',
     contactTitle: ['Still stuck?', 'Write to us.'],
     contactLead:
-      'JisokuDict is made by one developer, who reads every message. Bug reports, ideas for new features and corrections to dictionary entries are all welcome.',
+      'Jisoku is made by one developer, who reads every message. Bug reports, ideas for new features and corrections to dictionary entries are all welcome.',
     tipsTitle: 'For bugs, it helps to include',
     tips: [
       'What you expected, and what happened instead',
@@ -381,7 +381,7 @@ const STRINGS = {
     contact: 'Contacto',
     contactTitle: ['¿Sigues con dudas?', 'Escríbenos.'],
     contactLead:
-      'JisokuDict lo hace un solo desarrollador, que lee todos los mensajes. Puedes escribir en español. Los reportes de errores, las ideas para nuevas funciones y las correcciones al diccionario son bienvenidos.',
+      'Jisoku lo hace un solo desarrollador, que lee todos los mensajes. Puedes escribir en español. Los reportes de errores, las ideas para nuevas funciones y las correcciones al diccionario son bienvenidos.',
     tipsTitle: 'Si es un error, ayuda incluir',
     tips: [
       'Qué esperabas y qué pasó en cambio',

@@ -22,7 +22,7 @@ const STRINGS = {
     },
     placeholders: {
       bug: 'What happened, and what did you expect? Steps to reproduce help a lot.',
-      feature: 'What would you like JisokuDict to do?',
+      feature: 'What would you like Jisoku to do?',
       purchase: 'What did you buy, and what’s going wrong? (Never include card details.)',
       question: 'Ask away.',
       other: 'What’s on your mind?',
@@ -60,7 +60,7 @@ const STRINGS = {
     },
     placeholders: {
       bug: '¿Qué pasó y qué esperabas que pasara? Los pasos para reproducirlo ayudan mucho.',
-      feature: '¿Qué te gustaría que hiciera JisokuDict?',
+      feature: '¿Qué te gustaría que hiciera Jisoku?',
       purchase: '¿Qué compraste y qué está fallando? (Nunca incluyas datos de tu tarjeta).',
       question: 'Pregunta lo que quieras.',
       other: '¿Qué tienes en mente?',
