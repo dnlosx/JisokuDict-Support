@@ -9,8 +9,8 @@ const LABELS = {
 } as const
 
 const CREDITS = {
-  en: 'Dictionary data: JMdict and KANJIDIC2 © EDRDG (CC BY-SA 4.0). Stroke order: KanjiVG © Ulrich Apel (CC BY-SA 3.0) and animCJK © FM-SH (Arphic Public License). Pitch accents: Kanjium (CC BY-SA 4.0). Example sentences: Tatoeba (CC BY 2.0 FR).',
-  ja: '辞書データ：JMdict・KANJIDIC2 © EDRDG（CC BY-SA 4.0）。書き順：KanjiVG © Ulrich Apel（CC BY-SA 3.0）、animCJK © FM-SH（Arphic Public License）。アクセント：Kanjium（CC BY-SA 4.0）。例文：Tatoeba（CC BY 2.0 FR）。',
+  en: 'Dictionary data: JMdict and KANJIDIC2 © EDRDG (CC BY-SA 4.0). Stroke order: KanjiVG © Ulrich Apel (CC BY-SA 3.0) and animCJK © FM-SH (Arphic Public License). Pitch accents: Kanjium (CC BY-SA 4.0). Example sentences: Tatoeba (CC BY 2.0 FR). Voice: VOICEVOX Nemo.',
+  ja: '辞書データ：JMdict・KANJIDIC2 © EDRDG（CC BY-SA 4.0）。書き順：KanjiVG © Ulrich Apel（CC BY-SA 3.0）、animCJK © FM-SH（Arphic Public License）。アクセント：Kanjium（CC BY-SA 4.0）。例文：Tatoeba（CC BY 2.0 FR）。音声：VOICEVOX Nemo。',
 } as const
 
 type Props = {

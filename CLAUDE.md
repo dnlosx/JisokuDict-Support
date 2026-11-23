@@ -51,10 +51,10 @@ This is a Next.js 15 site for the JisokuDict iOS app. It serves as a landing pag
 - `landing/DeviceFrame.tsx` draws the iPhone around the hero demo and the screenshots. It is an iPhone 16 Pro to scale: the `.device*` rules in `globals.css` are written in iOS points (`--pt`) and scale with the frame's width, so change measurements there, not with Tailwind radii. It gives its content `--safe-top` and `--safe-bottom`, which `DictionaryDemo` pads by.
 - `DictionaryDemo` is a small copy of the app inside that frame: search (English, kana, kanji, romaji, conjugated forms), word detail (pitch graph, conjugations, example sentences, audio) and kanji detail (brush stroke order). `PitchCompare`, `StrokePlayer` and `FlashcardDemo` are the other sections' demos. The logic (search ranking, conjugation, romaji, pitch) is in `src/lib/demo/` and has no React in it.
 - The data is a 700-word sample of the app's real dictionary, built by `scripts/build-demo-data.mjs` from the app's `jmdict.db` and `brushvg.json` (usage is in the script's header). It writes `public/demo/words.json` (fetched when the page loads), `public/demo/kanji/<hex>.json` (fetched per kanji) and `src/content/demo-featured.json` (the words the page itself shows, inlined). Rebuild it when the app's dictionary data is refreshed; `--sentences` also refetches example sentences from `api.jisoku.app`. Don't put generated files in a folder named `data/`: `.gitignore` ignores it for the SQLite file.
-- Audio uses the browser's Japanese voice (`speechSynthesis`). `scripts/fetch-demo-audio.mjs` downloads the app's own clips for the featured words into `public/demo/audio/` and lists them in `src/content/demo-audio.json`; words listed there play the clip instead.
+- Audio is the app's own voice (VOICEVOX Nemo, speaker 10006), never the browser's speech synthesis. `public/demo/audio/` holds one clip per word in `words.json` and per featured example sentence, named by a hash of the text (`clipName` in `demo/speech.ts` and in the script, which must match). `scripts/fetch-demo-audio.mjs` makes them: from the app's audio bucket where a clip exists, otherwise synthesized with a local VOICEVOX Nemo engine through jisokuweb's `cmd/audiofix` (usage is in the script's header). Run it after `build-demo-data.mjs`, or new words and sentences stay silent; it exits 1 if any text has no clip.
 - The screenshots in `public/shots/<lang>/` are the app's Indigo-theme captures (`JisokuScreenshot/` in the app repo), and `public/og/<lang>.png` are the App Store header images padded to 1200×630. Screenshots must never show ads. The Live Scan capture shows a page of *Give My Regards to Black Jack*; keep Shuho Sato's credit under it.
 - `/support` (both locales) uses the same frame around English captures in `public/shots/en/`, made the same way (660×1435 WebP from `JisokuScreenshot/iPhone English (Indigo)/`). Its Purchases topic has no capture: `SettingsScreen` in `SupportView.tsx` draws the app's Settings with Remove Ads bought, so keep its labels in step with the app.
-- The footer's data credits (JMdict, KANJIDIC2, KanjiVG, animCJK, Kanjium, Tatoeba) are a license requirement, since the page shows that data.
+- The footer's credits (JMdict, KANJIDIC2, KanjiVG, animCJK, Kanjium, Tatoeba, VOICEVOX Nemo) are a license requirement, since the page shows that data and plays that voice.
 
 ### Search engines
 
@@ -116,7 +116,7 @@ src/
 │   │                                 # ContactForm, TurnstileWidget, SignOutButton
 │   ├── landing/                      # LandingPage + copy.ts (en, ja)
 │   └── demo/                         # the landing page's interactive demos (client components)
-├── content/                          # generated: demo-featured.json, demo-audio.json
+├── content/                          # generated: demo-featured.json
 ├── db/
 │   ├── index.ts                      # client singleton
 │   ├── schema.ts                     # feedback, rate_limits, ip_bans (+ legacy ticket tables)

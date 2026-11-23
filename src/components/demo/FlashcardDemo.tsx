@@ -63,7 +63,7 @@ export function FlashcardDemo({ locale }: { locale: DemoLocale }) {
               <div className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl bg-white p-5 text-center shadow-sm [backface-visibility:hidden] [transform:rotateY(180deg)]" aria-hidden={!flipped}>
                 <span className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wide text-ink-400">
                   {t.word}
-                  {flipped && <SpeakButton size="sm" text={current} label={t.listen(current)} unavailable={t.noVoice} />}
+                  {flipped && <SpeakButton size="sm" text={current} label={t.listen(current)} />}
                 </span>
                 <span className="mt-1 font-japanese text-2xl font-semibold text-ink-900" lang="ja">{current}</span>
                 <span className="font-japanese text-ink-500" lang="ja">{word.r[0]} · <span lang="en">{toRomaji(word.r[0])}</span></span>

@@ -52,7 +52,7 @@ export function PitchCompare({ locale }: { locale: DemoLocale }) {
                 </span>
               </span>
               <PitchGraph reading={reading} pattern={pattern} particle step={30} />
-              <SpeakButton text={headword(w)} label={t.listen(headword(w))} unavailable={t.noVoice} />
+              <SpeakButton text={headword(w)} label={t.listen(headword(w))} />
             </li>
           )
         })}

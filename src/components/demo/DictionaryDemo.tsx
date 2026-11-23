@@ -153,7 +153,7 @@ export function DictionaryDemo({ locale, appStoreUrl }: Props) {
               <span className="min-w-0 flex-1 truncate text-[15px] font-semibold font-japanese" lang="ja">
                 {view.type === 'kanji' ? view.ch : word ? headword(word) : ''}
               </span>
-              {word && <SpeakButton size="sm" text={headword(word)} label={t.listen(headword(word))} unavailable={t.noVoice} />}
+              {word && <SpeakButton size="sm" text={headword(word)} label={t.listen(headword(word))} />}
             </div>
           </div>
           <div ref={scroller} className="min-h-0 flex-1 overflow-y-auto bg-white">
@@ -403,7 +403,7 @@ function WordDetail({ t, locale, word, inflection, onKanji }: { t: DemoStrings; 
                   </p>
                   <p className="text-sm leading-snug text-ink-500">{s.e}</p>
                 </div>
-                <SpeakButton size="sm" text={s.t} label={t.listen(s.t)} unavailable={t.noVoice} />
+                <SpeakButton size="sm" text={s.t} label={t.listen(s.t)} />
               </li>
             ))}
           </ul>

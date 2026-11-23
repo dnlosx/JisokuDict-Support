@@ -132,7 +132,6 @@ const UI = {
     sessionDone: 'Session complete',
     sessionBody: 'In the app, cards come back right when you’re about to forget them.',
     again: 'Go again',
-    noVoice: 'This browser has no Japanese voice. The app has its own.',
   },
   ja: {
     search: '検索',
@@ -187,7 +186,6 @@ const UI = {
     sessionDone: 'セッション完了',
     sessionBody: 'アプリでは、忘れかけた頃にカードがもう一度出てきます。',
     again: 'もう一度',
-    noVoice: 'このブラウザには日本語の音声がありません。アプリには専用の音声があります。',
   },
 } as const
 
